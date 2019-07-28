@@ -30,15 +30,43 @@ public class CartHandler {
 
     private CartService cartService;
 
-    @RequestMapping(value = "/del/{cartId}", method = RequestMethod.GET)
-    public ModelAndView delCartByCartId(@PathVariable("cartId") Integer cartId){
+    @RequestMapping(value = "/clear", method = RequestMethod.GET)
+    public ModelAndView clearCart(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
         try{
-
+            User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+            cartService.deleteByUserId(user.getUserId());
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已清空购物车");
         }catch (Exception e){
-
+            LOGGER.error(e.getMessage(), e);
+            modelAndView.setViewName("pages/500");
+            return modelAndView;
         }
-        modelAndView.setViewName("redirect:/cart/info");
+        modelAndView.setViewName("redirect:/cart/info.html");
+        return modelAndView;
+    }
+
+    /**
+     * 根据购物车id删除购物车
+     * @param cartId 购物车id
+     * @return 返回modelAndView
+     */
+    @RequestMapping(value = "/del/{cartId}", method = RequestMethod.GET)
+    public ModelAndView delCartByCartId(@PathVariable("cartId") Integer cartId, HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        try{
+            if(IntegerUtil.isNotValid(cartId)){
+                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请选择要删除的商品");
+            } else{
+                cartService.deleteByCartId(cartId);
+                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已删除该商品");
+            }
+        }catch (Exception e){
+            LOGGER.error(e.getMessage(), e);
+            modelAndView.setViewName("pages/500");
+            return modelAndView;
+        }
+        modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
     }
 
@@ -53,7 +81,6 @@ public class CartHandler {
         try {
             //查询用户的购物车信息
             List<Map<String, Object>> cartList = cartService.findBaseInfoByUserId(((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId());
-            LOGGER.debug(cartList.toString());
             //存入session
             request.getSession().setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
         } catch (Exception e) {

@@ -88,34 +88,36 @@
                                                 <div class="cart_product_price">${cart.cartGoodsSize}</div>
                                                 <div class="cart_product_price">￥${cart.goodsPrice}</div>
                                                 <!-- Product Quantity -->
-                                                <div class="product_quantity_container">
-                                                    <div class="product_quantity clearfix">
-                                                        <input id="quantity_input" type="text" pattern="[0-9]*"
-                                                               value="${cart.cartGoodsNum}">
-                                                        <div class="quantity_buttons">
-                                                            <div id="quantity_inc_button"
-                                                                 class="quantity_inc quantity_control"><i
-                                                                    class="fa fa-caret-up" aria-hidden="true"></i></div>
-                                                            <div id="quantity_dec_button"
-                                                                 class="quantity_dec quantity_control"><i
-                                                                    class="fa fa-caret-down" aria-hidden="true"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <div class="cart_product_price">${cart.cartGoodsNum}</div>
+                                                <%--<div class="product_quantity_container">--%>
+                                                    <%--<div class="product_quantity clearfix">--%>
+                                                        <%--<input id="quantity_input" type="text" pattern="[0-9]*"--%>
+                                                               <%--value="${cart.cartGoodsNum}">--%>
+                                                        <%--<div class="quantity_buttons">--%>
+                                                            <%--<div id="quantity_inc_button"--%>
+                                                                 <%--class="quantity_inc quantity_control"><i--%>
+                                                                    <%--class="fa fa-caret-up" aria-hidden="true"></i></div>--%>
+                                                            <%--<div id="quantity_dec_button"--%>
+                                                                 <%--class="quantity_dec quantity_control"><i--%>
+                                                                    <%--class="fa fa-caret-down" aria-hidden="true"></i>--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
+                                                    <%--</div>--%>
+                                                <%--</div>--%>
                                                 <!-- Products Total Price -->
                                                 <div class="cart_product_total">￥${cart.totalPrice}</div>
                                                 <c:set value="${allGoodsPrice + cart.totalPrice}" var="allGoodsPrice"/>
                                                 <!-- Product Cart Trash Button -->
                                                 <div class="cart_product_button">
-                                                    <button class="cart_product_remove">
-                                                        <img href="" src="<%=path%>/static/images/trash.png" alt="">
-                                                    </button>
+                                                    <a href="<%=path%>/cart/del/${cart.cartId}.do" class="cart_product_remove">
+                                                        <img src="<%=path%>/static/images/trash.png" alt="">
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
                                 </c:forEach>
+                                <% session.removeAttribute("cartList");%>
                             </ul>
                         </div>
                     </div>
@@ -123,9 +125,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="cart_control_bar d-flex flex-md-row flex-column align-items-start justify-content-start">
-                            <button class="button_clear cart_button">清空购物车</button>
+                            <a href="<%=path%>/cart/clear.do" style="padding-top: 1%;" class="button_clear cart_button">清空购物车</a>
                             <!-- <button class="button_update cart_button">update cart</button> -->
-                            <button class="button_update cart_button_2 ml-md-auto">继续购物</button>
+                            <a href="<%=path%>/customerLink/clothes/1/12.html" style="padding-top: 1%;" class="button_update cart_button_2 ml-md-auto">继续购物</a>
                         </div>
                     </div>
                 </div>
@@ -255,5 +257,17 @@
     <script src="<%=path%>/static/plugins/easing/easing.js"></script>
     <script src="<%=path%>/static/plugins/parallax-js-master/parallax.min.js"></script>
     <script src="<%=path%>/static/js/cart_custom.js"></script>
+    <script type="text/javascript" src="<%=path%>/static/plugins/layui/layui.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                <c:if test="${not empty sessionScope.dealMsg}">
+                layer.msg("${sessionScope.dealMsg}");
+                </c:if>
+            });
+        })
+    </script>
+    <%session.removeAttribute("dealMsg");%>
 </body>
 </html>
