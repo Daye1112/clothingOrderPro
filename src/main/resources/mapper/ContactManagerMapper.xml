@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ky.clothing.dao.ContactManagerMapper">
+    <resultMap id="BaseResultMap" type="com.ky.clothing.entity.ContactManager">
+        <id column="contact_manager_id" jdbcType="INTEGER" property="contactManagerId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="user_msg" jdbcType="VARCHAR" property="userMsg"/>
+        <result column="manager_msg" jdbcType="VARCHAR" property="managerMsg"/>
+        <result column="isReply" jdbcType="BOOLEAN" property="isReply"/>
+        <result column="manager_name" jdbcType="VARCHAR" property="managerName"/>
+        <result column="contact_manager_valid" jdbcType="BOOLEAN" property="contactManagerValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+            contact_manager_id,
+            user_id,
+            goods_id,
+            user_msg,
+            manager_msg,
+            isReply,
+            manager_name,
+            contact_manager_valid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from contact_manager
+        where contact_manager_id = #{contactManagerId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from contact_manager
+        where contact_manager_id = #{contactManagerId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="contact_manager_id" keyProperty="contactManagerId"
+            parameterType="com.ky.clothing.entity.ContactManager" useGeneratedKeys="true">
+        insert into contact_manager (user_id, goods_id, user_msg,
+                                     manager_msg, isReply, manager_name,
+                                     contact_manager_valid)
+        values (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{userMsg,jdbcType=VARCHAR},
+                #{managerMsg,jdbcType=VARCHAR}, #{isReply,jdbcType=BOOLEAN}, #{managerName,jdbcType=VARCHAR},
+                #{contactManagerValid,jdbcType=BOOLEAN})
+    </insert>
+    <insert id="insertSelective" keyColumn="contact_manager_id" keyProperty="contactManagerId"
+            parameterType="com.ky.clothing.entity.ContactManager" useGeneratedKeys="true">
+        insert into contact_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="userMsg != null">
+                user_msg,
+            </if>
+            <if test="managerMsg != null">
+                manager_msg,
+            </if>
+            <if test="isReply != null">
+                isReply,
+            </if>
+            <if test="managerName != null">
+                manager_name,
+            </if>
+            <if test="contactManagerValid != null">
+                contact_manager_valid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="userMsg != null">
+                #{userMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="managerMsg != null">
+                #{managerMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="isReply != null">
+                #{isReply,jdbcType=BOOLEAN},
+            </if>
+            <if test="managerName != null">
+                #{managerName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactManagerValid != null">
+                #{contactManagerValid,jdbcType=BOOLEAN},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.ContactManager">
+        update contact_manager
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="userMsg != null">
+                user_msg = #{userMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="managerMsg != null">
+                manager_msg = #{managerMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="isReply != null">
+                isReply = #{isReply,jdbcType=BOOLEAN},
+            </if>
+            <if test="managerName != null">
+                manager_name = #{managerName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactManagerValid != null">
+                contact_manager_valid = #{contactManagerValid,jdbcType=BOOLEAN},
+            </if>
+        </set>
+        where contact_manager_id = #{contactManagerId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.ContactManager">
+        update contact_manager
+        set user_id               = #{userId,jdbcType=INTEGER},
+            goods_id              = #{goodsId,jdbcType=INTEGER},
+            user_msg              = #{userMsg,jdbcType=VARCHAR},
+            manager_msg           = #{managerMsg,jdbcType=VARCHAR},
+            isReply               = #{isReply,jdbcType=BOOLEAN},
+            manager_name          = #{managerName,jdbcType=VARCHAR},
+            contact_manager_valid = #{contactManagerValid,jdbcType=BOOLEAN}
+        where contact_manager_id = #{contactManagerId,jdbcType=INTEGER}
+    </update>
+</mapper>

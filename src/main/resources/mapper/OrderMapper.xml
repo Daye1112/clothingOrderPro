@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ky.clothing.dao.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.ky.clothing.entity.Order">
+        <id column="order_id" jdbcType="INTEGER" property="orderId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="goods_money" jdbcType="DOUBLE" property="goodsMoney"/>
+        <result column="deliver_money" jdbcType="DOUBLE" property="deliverMoney"/>
+        <result column="total_money" jdbcType="DOUBLE" property="totalMoney"/>
+        <result column="order_status" jdbcType="SMALLINT" property="orderStatus"/>
+        <result column="isPay" jdbcType="SMALLINT" property="isPay"/>
+        <result column="isInvoice" jdbcType="SMALLINT" property="isInvoice"/>
+        <result column="isClosed" jdbcType="SMALLINT" property="isClosed"/>
+        <result column="invoice_client" jdbcType="VARCHAR" property="invoiceClient"/>
+        <result column="tax_num" jdbcType="VARCHAR" property="taxNum"/>
+        <result column="order_remark" jdbcType="VARCHAR" property="orderRemark"/>
+        <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime"/>
+        <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="express_no" jdbcType="VARCHAR" property="expressNo"/>
+        <result column="express_name" jdbcType="VARCHAR" property="expressName"/>
+        <result column="order_valid" jdbcType="BOOLEAN" property="orderValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+            order_id,
+            user_id,
+            order_no,
+            goods_money,
+            deliver_money,
+            total_money,
+            order_status,
+            isPay,
+            isInvoice,
+            isClosed,
+            invoice_client,
+            tax_num,
+            order_remark,
+            receive_time,
+            delivery_time,
+            create_time,
+            express_no,
+            express_name,
+            order_valid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from order
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="order_id" keyProperty="orderId" parameterType="com.ky.clothing.entity.Order"
+            useGeneratedKeys="true">
+        insert into order (user_id, order_no, goods_money,
+                           deliver_money, total_money, order_status,
+                           isPay, isInvoice, isClosed,
+                           invoice_client, tax_num, order_remark,
+                           receive_time, delivery_time, create_time,
+                           express_no, express_name, order_valid)
+        values (#{userId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{goodsMoney,jdbcType=DOUBLE},
+                #{deliverMoney,jdbcType=DOUBLE}, #{totalMoney,jdbcType=DOUBLE}, #{orderStatus,jdbcType=SMALLINT},
+                #{isPay,jdbcType=SMALLINT}, #{isInvoice,jdbcType=SMALLINT}, #{isClosed,jdbcType=SMALLINT},
+                #{invoiceClient,jdbcType=VARCHAR}, #{taxNum,jdbcType=VARCHAR}, #{orderRemark,jdbcType=VARCHAR},
+                #{receiveTime,jdbcType=TIMESTAMP}, #{deliveryTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+                #{expressNo,jdbcType=VARCHAR}, #{expressName,jdbcType=VARCHAR}, #{orderValid,jdbcType=BOOLEAN})
+    </insert>
+    <insert id="insertSelective" keyColumn="order_id" keyProperty="orderId" parameterType="com.ky.clothing.entity.Order"
+            useGeneratedKeys="true">
+        insert into order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="goodsMoney != null">
+                goods_money,
+            </if>
+            <if test="deliverMoney != null">
+                deliver_money,
+            </if>
+            <if test="totalMoney != null">
+                total_money,
+            </if>
+            <if test="orderStatus != null">
+                order_status,
+            </if>
+            <if test="isPay != null">
+                isPay,
+            </if>
+            <if test="isInvoice != null">
+                isInvoice,
+            </if>
+            <if test="isClosed != null">
+                isClosed,
+            </if>
+            <if test="invoiceClient != null">
+                invoice_client,
+            </if>
+            <if test="taxNum != null">
+                tax_num,
+            </if>
+            <if test="orderRemark != null">
+                order_remark,
+            </if>
+            <if test="receiveTime != null">
+                receive_time,
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="expressNo != null">
+                express_no,
+            </if>
+            <if test="expressName != null">
+                express_name,
+            </if>
+            <if test="orderValid != null">
+                order_valid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsMoney != null">
+                #{goodsMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="deliverMoney != null">
+                #{deliverMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="totalMoney != null">
+                #{totalMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="orderStatus != null">
+                #{orderStatus,jdbcType=SMALLINT},
+            </if>
+            <if test="isPay != null">
+                #{isPay,jdbcType=SMALLINT},
+            </if>
+            <if test="isInvoice != null">
+                #{isInvoice,jdbcType=SMALLINT},
+            </if>
+            <if test="isClosed != null">
+                #{isClosed,jdbcType=SMALLINT},
+            </if>
+            <if test="invoiceClient != null">
+                #{invoiceClient,jdbcType=VARCHAR},
+            </if>
+            <if test="taxNum != null">
+                #{taxNum,jdbcType=VARCHAR},
+            </if>
+            <if test="orderRemark != null">
+                #{orderRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveTime != null">
+                #{receiveTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliveryTime != null">
+                #{deliveryTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expressNo != null">
+                #{expressNo,jdbcType=VARCHAR},
+            </if>
+            <if test="expressName != null">
+                #{expressName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderValid != null">
+                #{orderValid,jdbcType=BOOLEAN},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.Order">
+        update order
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsMoney != null">
+                goods_money = #{goodsMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="deliverMoney != null">
+                deliver_money = #{deliverMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="totalMoney != null">
+                total_money = #{totalMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="orderStatus != null">
+                order_status = #{orderStatus,jdbcType=SMALLINT},
+            </if>
+            <if test="isPay != null">
+                isPay = #{isPay,jdbcType=SMALLINT},
+            </if>
+            <if test="isInvoice != null">
+                isInvoice = #{isInvoice,jdbcType=SMALLINT},
+            </if>
+            <if test="isClosed != null">
+                isClosed = #{isClosed,jdbcType=SMALLINT},
+            </if>
+            <if test="invoiceClient != null">
+                invoice_client = #{invoiceClient,jdbcType=VARCHAR},
+            </if>
+            <if test="taxNum != null">
+                tax_num = #{taxNum,jdbcType=VARCHAR},
+            </if>
+            <if test="orderRemark != null">
+                order_remark = #{orderRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveTime != null">
+                receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expressNo != null">
+                express_no = #{expressNo,jdbcType=VARCHAR},
+            </if>
+            <if test="expressName != null">
+                express_name = #{expressName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderValid != null">
+                order_valid = #{orderValid,jdbcType=BOOLEAN},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.Order">
+        update order
+        set user_id        = #{userId,jdbcType=INTEGER},
+            order_no       = #{orderNo,jdbcType=VARCHAR},
+            goods_money    = #{goodsMoney,jdbcType=DOUBLE},
+            deliver_money  = #{deliverMoney,jdbcType=DOUBLE},
+            total_money    = #{totalMoney,jdbcType=DOUBLE},
+            order_status   = #{orderStatus,jdbcType=SMALLINT},
+            isPay          = #{isPay,jdbcType=SMALLINT},
+            isInvoice      = #{isInvoice,jdbcType=SMALLINT},
+            isClosed       = #{isClosed,jdbcType=SMALLINT},
+            invoice_client = #{invoiceClient,jdbcType=VARCHAR},
+            tax_num        = #{taxNum,jdbcType=VARCHAR},
+            order_remark   = #{orderRemark,jdbcType=VARCHAR},
+            receive_time   = #{receiveTime,jdbcType=TIMESTAMP},
+            delivery_time  = #{deliveryTime,jdbcType=TIMESTAMP},
+            create_time    = #{createTime,jdbcType=TIMESTAMP},
+            express_no     = #{expressNo,jdbcType=VARCHAR},
+            express_name   = #{expressName,jdbcType=VARCHAR},
+            order_valid    = #{orderValid,jdbcType=BOOLEAN}
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </update>
+</mapper>

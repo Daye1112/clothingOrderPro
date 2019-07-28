@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ky.clothing.dao.SysLogMapper">
+  <resultMap id="BaseResultMap" type="com.ky.clothing.entity.SysLog">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="sys_user" jdbcType="VARCHAR" property="sysUser" />
+    <result column="sys_operator" jdbcType="VARCHAR" property="sysOperator" />
+    <result column="sys_module" jdbcType="VARCHAR" property="sysModule" />
+    <result column="sys_ip" jdbcType="VARCHAR" property="sysIp" />
+    <result column="sys_content" jdbcType="VARCHAR" property="sysContent" />
+    <result column="sys_time" jdbcType="TIMESTAMP" property="sysTime" />
+    <result column="sys_valid" jdbcType="BOOLEAN" property="sysValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, sys_user, sys_operator, sys_module, sys_ip, sys_content, sys_time, sys_valid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from syslog
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" keyColumn="log_id" keyProperty="logId" parameterType="com.ky.clothing.entity.SysLog" useGeneratedKeys="true">
+    insert into syslog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysUser != null">
+        sys_user,
+      </if>
+      <if test="sysOperator != null">
+        sys_operator,
+      </if>
+      <if test="sysModule != null">
+        sys_module,
+      </if>
+      <if test="sysIp != null">
+        sys_ip,
+      </if>
+      <if test="sysContent != null">
+        sys_content,
+      </if>
+      <if test="sysTime != null">
+        sys_time,
+      </if>
+      <if test="sysValid != null">
+        sys_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysUser != null">
+        #{sysUser,jdbcType=VARCHAR},
+      </if>
+      <if test="sysOperator != null">
+        #{sysOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="sysModule != null">
+        #{sysModule,jdbcType=VARCHAR},
+      </if>
+      <if test="sysIp != null">
+        #{sysIp,jdbcType=VARCHAR},
+      </if>
+      <if test="sysContent != null">
+        #{sysContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sysTime != null">
+        #{sysTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sysValid != null">
+        #{sysValid,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+</mapper>

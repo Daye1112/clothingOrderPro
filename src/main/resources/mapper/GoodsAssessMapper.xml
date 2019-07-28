@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ky.clothing.dao.GoodsAssessMapper">
+    <resultMap id="BaseResultMap" type="com.ky.clothing.entity.GoodsAssess">
+        <id column="goods_assess_id" jdbcType="INTEGER" property="goodsAssessId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_assess_score" jdbcType="INTEGER" property="goodsAssessScore"/>
+        <result column="goods_assess_content" jdbcType="VARCHAR" property="goodsAssessContent"/>
+        <result column="canAssess" jdbcType="BOOLEAN" property="canAssess"/>
+        <result column="goods_assess_valid" jdbcType="BOOLEAN" property="goodsAssessValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+            goods_assess_id,
+            user_id,
+            goods_id,
+            goods_assess_score,
+            goods_assess_content,
+            canAssess,
+            goods_assess_valid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods_assess
+        where goods_assess_id = #{goodsAssessId,jdbcType=INTEGER}
+    </select>
+    <!--根据商品id查询商品的所有评论基本信息-->
+    <select id="selectBaseInfoByGoodsId" resultType="java.util.Map">
+        SELECT u.avatar_url            avatarUrl,
+               u.login_account         loginAccount,
+               ga.goods_assess_score   goodsAssessScore,
+               ga.goods_assess_content goodsAssessContent
+        FROM goods_assess ga
+                 LEFT JOIN `user` u ON ga.user_id = u.user_id
+                 LEFT JOIN goods g ON ga.goods_id = g.goods_id
+        WHERE u.user_valid = 1
+          AND ga.goods_assess_valid = 1
+          AND g.goods_valid = 1
+          AND ga.canAssess = 1
+          AND g.goods_id = #{goodsId}
+    </select>
+    <!--查询评分最高的前4条评论-->
+    <select id="selectBaseInfoTopFour" resultType="java.util.Map">
+        SELECT u.avatar_url            avatarUrl,
+               u.login_account         loginAccount,
+               ga.goods_assess_content goodsAssessContent
+        FROM goods_assess ga
+                 LEFT JOIN `user` u ON ga.user_id = u.user_id
+                 LEFT JOIN goods g ON ga.goods_id = g.goods_id
+        WHERE u.user_valid = 1
+          AND ga.goods_assess_valid = 1
+          AND g.goods_valid = 1
+          AND ga.canAssess = 1
+        ORDER BY ga.goods_assess_score desc
+        LIMIT 4
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from goods_assess
+        where goods_assess_id = #{goodsAssessId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="goods_assess_id" keyProperty="goodsAssessId"
+            parameterType="com.ky.clothing.entity.GoodsAssess" useGeneratedKeys="true">
+        insert into goods_assess (user_id, goods_id, goods_assess_score,
+                                  goods_assess_content, canAssess, goods_assess_valid)
+        values (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{goodsAssessScore,jdbcType=INTEGER},
+                #{goodsAssessContent,jdbcType=VARCHAR}, #{canAssess,jdbcType=BOOLEAN},
+                #{goodsAssessValid,jdbcType=BOOLEAN})
+    </insert>
+    <insert id="insertSelective" keyColumn="goods_assess_id" keyProperty="goodsAssessId"
+            parameterType="com.ky.clothing.entity.GoodsAssess" useGeneratedKeys="true">
+        insert into goods_assess
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsAssessScore != null">
+                goods_assess_score,
+            </if>
+            <if test="goodsAssessContent != null">
+                goods_assess_content,
+            </if>
+            <if test="canAssess != null">
+                canAssess,
+            </if>
+            <if test="goodsAssessValid != null">
+                goods_assess_valid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsAssessScore != null">
+                #{goodsAssessScore,jdbcType=INTEGER},
+            </if>
+            <if test="goodsAssessContent != null">
+                #{goodsAssessContent,jdbcType=VARCHAR},
+            </if>
+            <if test="canAssess != null">
+                #{canAssess,jdbcType=BOOLEAN},
+            </if>
+            <if test="goodsAssessValid != null">
+                #{goodsAssessValid,jdbcType=BOOLEAN},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.GoodsAssess">
+        update goods_assess
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsAssessScore != null">
+                goods_assess_score = #{goodsAssessScore,jdbcType=INTEGER},
+            </if>
+            <if test="goodsAssessContent != null">
+                goods_assess_content = #{goodsAssessContent,jdbcType=VARCHAR},
+            </if>
+            <if test="canAssess != null">
+                canAssess = #{canAssess,jdbcType=BOOLEAN},
+            </if>
+            <if test="goodsAssessValid != null">
+                goods_assess_valid = #{goodsAssessValid,jdbcType=BOOLEAN},
+            </if>
+        </set>
+        where goods_assess_id = #{goodsAssessId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.GoodsAssess">
+        update goods_assess
+        set user_id              = #{userId,jdbcType=INTEGER},
+            goods_id             = #{goodsId,jdbcType=INTEGER},
+            goods_assess_score   = #{goodsAssessScore,jdbcType=INTEGER},
+            goods_assess_content = #{goodsAssessContent,jdbcType=VARCHAR},
+            canAssess            = #{canAssess,jdbcType=BOOLEAN},
+            goods_assess_valid   = #{goodsAssessValid,jdbcType=BOOLEAN}
+        where goods_assess_id = #{goodsAssessId,jdbcType=INTEGER}
+    </update>
+</mapper>

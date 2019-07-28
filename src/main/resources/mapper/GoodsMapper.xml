@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ky.clothing.dao.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.ky.clothing.entity.Goods">
+        <id column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_no" jdbcType="VARCHAR" property="goodsNo"/>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
+        <result column="goods_image_url" jdbcType="VARCHAR" property="goodsImageUrl"/>
+        <result column="goods_price" jdbcType="DOUBLE" property="goodsPrice"/>
+        <result column="goods_num" jdbcType="INTEGER" property="goodsNum"/>
+        <result column="goods_stock" jdbcType="INTEGER" property="goodsStock"/>
+        <result column="goods_desc" jdbcType="VARCHAR" property="goodsDesc"/>
+        <result column="goods_score" jdbcType="INTEGER" property="goodsScore"/>
+        <result column="visit_num" jdbcType="INTEGER" property="visitNum"/>
+        <result column="goods_valid" jdbcType="BOOLEAN" property="goodsValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+            goods_id,
+            goods_no,
+            goods_name,
+            goods_image_url,
+            goods_price,
+            goods_num,
+            goods_stock,
+            goods_desc,
+            goods_score,
+            visit_num,
+            goods_valid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </select>
+    <!--查询评价排名前三的商品信息-->
+    <select id="selectGoodsTopThree" resultMap="BaseResultMap">
+        select goods_id, goods_no, goods_name, goods_image_url, goods_price, goods_score
+        from goods
+        order by goods_score
+        limit 3
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from goods
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="goods_id" keyProperty="goodsId" parameterType="com.ky.clothing.entity.Goods"
+            useGeneratedKeys="true">
+        insert into goods (goods_no, goods_name, goods_image_url,
+                           goods_price, goods_num, goods_stock,
+                           goods_desc, goods_score, visit_num,
+                           goods_valid)
+        values (#{goodsNo,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{goodsImageUrl,jdbcType=VARCHAR},
+                #{goodsPrice,jdbcType=DOUBLE}, #{goodsNum,jdbcType=INTEGER}, #{goodsStock,jdbcType=INTEGER},
+                #{goodsDesc,jdbcType=VARCHAR}, #{goodsScore,jdbcType=DOUBLE}, #{visitNum,jdbcType=INTEGER},
+                #{goodsValid,jdbcType=BOOLEAN})
+    </insert>
+    <insert id="insertSelective" keyColumn="goods_id" keyProperty="goodsId" parameterType="com.ky.clothing.entity.Goods"
+            useGeneratedKeys="true">
+        insert into goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsNo != null">
+                goods_no,
+            </if>
+            <if test="goodsName != null">
+                goods_name,
+            </if>
+            <if test="goodsImageUrl != null">
+                goods_image_url,
+            </if>
+            <if test="goodsPrice != null">
+                goods_price,
+            </if>
+            <if test="goodsNum != null">
+                goods_num,
+            </if>
+            <if test="goodsStock != null">
+                goods_stock,
+            </if>
+            <if test="goodsDesc != null">
+                goods_desc,
+            </if>
+            <if test="goodsScore != null">
+                goods_score,
+            </if>
+            <if test="visitNum != null">
+                visit_num,
+            </if>
+            <if test="goodsValid != null">
+                goods_valid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsNo != null">
+                #{goodsNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsImageUrl != null">
+                #{goodsImageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsPrice != null">
+                #{goodsPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="goodsNum != null">
+                #{goodsNum,jdbcType=INTEGER},
+            </if>
+            <if test="goodsStock != null">
+                #{goodsStock,jdbcType=INTEGER},
+            </if>
+            <if test="goodsDesc != null">
+                #{goodsDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsScore != null">
+                #{goodsScore,jdbcType=DOUBLE},
+            </if>
+            <if test="visitNum != null">
+                #{visitNum,jdbcType=INTEGER},
+            </if>
+            <if test="goodsValid != null">
+                #{goodsValid,jdbcType=BOOLEAN},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.Goods">
+        update goods
+        <set>
+            <if test="goodsNo != null">
+                goods_no = #{goodsNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null">
+                goods_name = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsImageUrl != null">
+                goods_image_url = #{goodsImageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsPrice != null">
+                goods_price = #{goodsPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="goodsNum != null">
+                goods_num = #{goodsNum,jdbcType=INTEGER},
+            </if>
+            <if test="goodsStock != null">
+                goods_stock = #{goodsStock,jdbcType=INTEGER},
+            </if>
+            <if test="goodsDesc != null">
+                goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsScore != null">
+                goods_score = #{goodsScore,jdbcType=DOUBLE},
+            </if>
+            <if test="visitNum != null">
+                visit_num = #{visitNum,jdbcType=INTEGER},
+            </if>
+            <if test="goodsValid != null">
+                goods_valid = #{goodsValid,jdbcType=BOOLEAN},
+            </if>
+        </set>
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.Goods">
+        update goods
+        set goods_no        = #{goodsNo,jdbcType=VARCHAR},
+            goods_name      = #{goodsName,jdbcType=VARCHAR},
+            goods_image_url = #{goodsImageUrl,jdbcType=VARCHAR},
+            goods_price     = #{goodsPrice,jdbcType=DOUBLE},
+            goods_num       = #{goodsNum,jdbcType=INTEGER},
+            goods_stock     = #{goodsStock,jdbcType=INTEGER},
+            goods_desc      = #{goodsDesc,jdbcType=VARCHAR},
+            goods_score     = #{goodsScore,jdbcType=DOUBLE},
+            visit_num       = #{visitNum,jdbcType=INTEGER},
+            goods_valid     = #{goodsValid,jdbcType=BOOLEAN}
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+    <!--分页查询商品记录-->
+    <select id="selectGoodsLimit" resultMap="BaseResultMap">
+
+    </select>
+</mapper>

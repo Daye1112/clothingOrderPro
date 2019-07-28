@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 配置自定义的Realm -->
+    <bean id="userRealm" class="com.ky.clothing.realm.UserRealm">
+        <!-- 密码需要加密 -->
+        <!--<property name="credentialsMatcher" ref="credentialsMatcher" />-->
+        <!--<property name="userDAO" ref="userDAOImpl"/>-->
+        <!--<property name="roleDAO" ref="roleDAOImpl"/>-->
+        <!--<property name="permissionDAO" ref="permissionDAOImpl"/>-->
+    </bean>
+
+    <!-- 配置安全管理器SecurityManager -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"/>
+        <!-- 添加缓存 -->
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <!-- 定义ShiroFilter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/userLink/login.html"/>
+        <!--<property name="successUrl" value="/customerLink/home"/>-->
+        <property name="unauthorizedUrl" value="/404.jsp"/>
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 静态资源请求无限制 -->
+                /static/** = anon
+                <!-- 根路径访问无限制 -->
+                / = anon
+                <!-- 游客预览页面无限制 -->
+                /customerLink/** = anon
+                <!-- 用户忘记密码发送验证码至邮件无限制 -->
+                /email/** = anon
+                <!-- 用户登录请求无限制 -->
+                /user/login.do = anon
+                <!-- 用户注册请求无限制 -->
+                /user/signUp.do = anon
+                <!-- 用户登录页面无限制 -->
+                /userLink/login.html = anon
+                <!-- 登出 -->
+                /logout.do = logout
+                <!-- 商品操作需要登录 -->
+                /goods/** = authc
+                <!-- 用户相关请求需登录 -->
+                /user/** = authc
+                <!-- 用户相关页面跳转需登录 -->
+                /userLink/** = authc
+                <!-- 其他未注册页面需登录 -->
+                /** = authc
+            </value>
+        </property>
+    </bean>
+    <!-- 开启aop，对类代理 -->
+    <aop:config proxy-target-class="true"/>
+    <!-- 开启shiro注解支持 -->
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">redirect:/404.jsp</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 缓存管理器开始 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+    <bean id="ehCacheManager" class ="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:cache/shiro-ehcache.xml" />
+        <property name="shared" value="true"/>
+    </bean>
+
+    <!-- 加密器 -->
+    <!--<bean id="credentialsMatcher"-->
+          <!--class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">-->
+        <!--&lt;!&ndash; 加密算法 &ndash;&gt;-->
+        <!--<property name="hashAlgorithmName" value="md5" />-->
+        <!--&lt;!&ndash; 散列次数 &ndash;&gt;-->
+        <!--<property name="hashIterations" value="3" />-->
+    <!--</bean>-->
+
+</beans>
