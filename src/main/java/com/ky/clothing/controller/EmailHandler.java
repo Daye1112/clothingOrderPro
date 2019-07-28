@@ -42,7 +42,6 @@ public class EmailHandler {
     @RequestMapping(value = "/modify/pwd", method = RequestMethod.POST)
     public ModelAndView modifyPwdByEmail(String checkCode, String newPassword, String newPasswordCheck, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             //0. 空值校验
             if (StringUtil.isEmpty(checkCode) || StringUtil.isEmpty(newPassword) || StringUtil.isEmpty((newPasswordCheck))) {
                 modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "存在空值");
@@ -75,10 +74,7 @@ public class EmailHandler {
                     }//1.5 判断session是否为空 End
                 }//1. 新密码和确认密码进行核对End
             }   // 0. 空值校验end
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "操作异常");
-        }
+
         modelAndView.setViewName("pages/forgot_password_modify");
         return modelAndView;
     }
@@ -89,11 +85,11 @@ public class EmailHandler {
      * @param email   email地址
      * @param request 请求域
      * @return 返回modelAndView
+     * @throws Exception 
      */
     @RequestMapping(value = "/pwd/send", method = RequestMethod.POST)
-    public ModelAndView sendEmailForModifyPwd(String email, HttpServletRequest request) {
+    public ModelAndView sendEmailForModifyPwd(String email, HttpServletRequest request) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             //1. email空值判断
             if (StringUtil.isEmpty(email)) {
                 modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱不可为空");
@@ -116,10 +112,7 @@ public class EmailHandler {
                     modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱未绑定账号");
                 }// email是否绑定账号 End
             }//email空值判断End
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "操作异常");
-        }
+
         modelAndView.setViewName("/pages/forgot_password");
         //6. 跳转
         return modelAndView;

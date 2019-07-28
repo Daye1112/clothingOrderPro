@@ -36,7 +36,6 @@ public class GoodsAssessHandler {
     @RequestMapping(value = "/publish", method = RequestMethod.POST)
     public ModelAndView publishAssess(GoodsAssess goodsAssess, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
-        try{
             System.out.println(goodsAssess);
             //1. 空值判断
             if(StringUtil.isEmpty(goodsAssess.getGoodsAssessContent())
@@ -53,11 +52,7 @@ public class GoodsAssessHandler {
                 //设置返回信息
                 request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "评论成功");
             }
-        }catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.setViewName("pages/500");
-            return modelAndView;
-        }
+
         modelAndView.setViewName("redirect:/goods/info/" + goodsAssess.getGoodsId() + ".html");
         return modelAndView;
     }

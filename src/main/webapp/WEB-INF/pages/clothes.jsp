@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%String path = request.getContextPath();%>
 <!DOCTYPE html>
 <html lang="en">
@@ -193,285 +194,37 @@
                         <!-- Products -->
 
                         <div class="product_grid">
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_1.jpg" alt=""></div>
-                                <div class="rating rating_4" data-rating="4">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Woman's Long Dress</a></div>
-                                        <div class="product_price">$45.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_2.jpg" alt=""></div>
-                                <div class="rating rating_5" data-rating="5">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">2 Piece Swimsuit</a></div>
-                                        <div class="product_price">$35.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_3.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_4.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_5.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_6.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_7.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_8.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_9.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_10.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_11.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product -->
-                            <div class="product">
-                                <div class="product_image"><img src="<%=path%>/static/images/product_12.jpg" alt=""></div>
-                                <div class="rating rating_3" data-rating="3">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="product_content clearfix">
-                                    <div class="product_info">
-                                        <div class="product_name"><a href="">Man Blue Jacket</a></div>
-                                        <div class="product_price">$145.00</div>
-                                    </div>
-                                    <div class="product_options">
-                                        <div class="product_buy product_option"><img src="<%=path%>/static/images/shopping-bag-white.svg"
-                                                                                     alt=""></div>
-                                        <div class="product_fav product_option">+</div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            <c:forEach items="${sessionScope.goodsList}" var="goods">
+                        	<!-- Product -->
+                           		<div class="product">
+                               		<div class="product_image">
+                                   		<img src="<%=path%>${goods.goodsImageUrl}" alt="">
+                               	</div>
+                               	<div class="rating rating_${goods.goodsScore}">
+                                   	<i class="fa fa-star"></i>
+                                   	<i class="fa fa-star"></i>
+                                   	<i class="fa fa-star"></i>
+                                   	<i class="fa fa-star"></i>
+                                   	<i class="fa fa-star"></i>
+                               	</div>
+                               		<div class="product_content clearfix">
+                                   		<div class="product_info">
+                                       		<div class="product_name"><a href="">${goods.goodsName}</a></div>
+                                       		<div class="product_price">￥${goods.goodsPrice}</div>
+                                   		</div>
+                                   		<div class="product_options">
+                                       		<a href="<%=path%>/goods/info/${goods.goodsId}.html"><div class="product_buy product_option"><img
+                                               	src="<%=path%>/static/images/shopping-bag-white.svg" alt=""></div></a>
+                                       		<div class="product_fav product_option"><img width="60%" src="<%=path%>/static/images/star.svg" alt=""></div>
+                                   		</div>
+                               		</div>
+                           		</div>
+                    		</c:forEach>
+                    		<% request.getSession().removeAttribute("goodsList");%>
                         </div>
-                    </div>
+
+                     </div>
+                </div>
 
                 </div>
 
