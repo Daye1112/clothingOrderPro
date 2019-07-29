@@ -12,18 +12,6 @@ import java.util.Map;
 public interface CartService {
 
     /**
-     * 根据用户id清空用户购物车中的所有商品
-     * @param userId 用户id
-     */
-    void deleteByUserId(Integer userId);
-
-    /**
-     * 根据cartId删除购物车信息
-     * @param cartId 购物车id
-     */
-    void deleteByCartId(Integer cartId);
-
-    /**
      * 根据用户id查询用户的购物车信息
      * @param userId 用户id
      * @return 返回map

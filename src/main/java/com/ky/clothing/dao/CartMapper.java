@@ -15,18 +15,6 @@ import java.util.Map;
 public interface CartMapper {
 
     /**
-     * 根据用户id清空用户购物车中的所有商品
-     * @param userId 用户id
-     */
-    void deleteByUserId(@Param("userId") Integer userId);
-
-    /**
-     * 根据cartId删除购物车信息
-     * @param cartId 购物车id
-     */
-    void deleteByCartId(@Param("cartId") Integer cartId);
-
-    /**
      * 根据userId查询用户的购物车数量
      * @param userId 用户id
      * @return 返回数量

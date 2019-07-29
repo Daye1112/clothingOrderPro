@@ -22,7 +22,7 @@ public class SendMailUtil {
      */
     private final static String SENDER_PASSWORD = "luyuhao2010";
 
-    public static void sendEmil(String recipientAddress, String checkCode, String modifyPath) throws Exception {
+    public static void sendEmil(String recipientAddress, String checkCode) throws Exception {
         //1、连接邮件服务器的参数配置
         Properties props = new Properties();
         //设置用户的认证方式
@@ -36,7 +36,7 @@ public class SendMailUtil {
         //设置调试信息在控制台打印出来
         session.setDebug(false);
         //3、创建邮件的实例对象
-        Message msg = getMimeMessage(session, recipientAddress, checkCode, modifyPath);
+        Message msg = getMimeMessage(session, recipientAddress, checkCode);
         //4、根据session对象获取邮件传输对象Transport
         Transport transport = session.getTransport();
         //设置发件人的账户名和密码
@@ -55,7 +55,7 @@ public class SendMailUtil {
      * @return
      * @throws Exception
      */
-    private static MimeMessage getMimeMessage(Session session, String recipientAddress, String checkCode, String modifyPath) throws Exception {
+    private static MimeMessage getMimeMessage(Session session, String recipientAddress, String checkCode) throws Exception {
         //1.创建一封邮件的实例对象
         MimeMessage msg = new MimeMessage(session);
         //2.设置发件人地址
@@ -101,7 +101,7 @@ public class SendMailUtil {
                 "\n" +
                 "                    <strong style=\"display:block;margin-bottom:15px;\">\n" +
                 "                        请点击链接进行密码修改：\n" +
-                "                        <span style=\"color:#f60;font-size: 16px;\"></span><a href=\"" + modifyPath + "\">" + modifyPath + "</a>\n" +
+                "                        <span style=\"color:#f60;font-size: 16px;\"></span><a href=\"http://192.168.5.238:8082/clothingOrderPro/customerLink/forgot/pwd\">http://192.168.5.238:8082/clothingOrderPro/customerLink/forgot/pwd</a>\n" +
                 "                    </strong>\n" +
                 "                </div>\n" +
                 "\n" +

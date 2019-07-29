@@ -14,7 +14,12 @@ import java.util.List;
 public interface GoodsMapper {
 
     /**
-     * TODO 分页查询商品记录
+     * 查询记录总数
+     * @return
+     */
+	int selectGoodsCount();
+	/**
+     * 分页查询商品记录
      * @param startIndex 开始查询的索引位
      * @param pageSize 页大小
      * @return 返回goodsList

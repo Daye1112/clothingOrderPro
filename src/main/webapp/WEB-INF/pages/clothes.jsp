@@ -231,11 +231,18 @@
                 <div class="row page_num_container">
                     <div class="col text-right">
                         <ul class="page_nums">
-                            <li class="active"><a href="#">01</a></li>
-                            <li><a href="#">02</a></li>
-                            <li><a href="#">03</a></li>
-                            <li><a href="#">04</a></li>
-                            <li><a href="#">05</a></li>
+
+                        	<%
+                        		int count=(int)request.getSession().getAttribute("goodsCount");
+                        		int pages=(count%12==0?count/12:count/12+1);
+                        		for(int i=1;i<=pages;i++)
+                        		{
+                        	%>                     	
+                        		<li><a href="<%=path%>/customerLink/clothes/<%=i %>/12.html"><%=i %></a></li>
+                     	 
+                        	 <% 
+                        		}
+                        	 %>
                         </ul>
                     </div>
                 </div>

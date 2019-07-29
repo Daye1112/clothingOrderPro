@@ -30,4 +30,6 @@ public interface GoodsService {
      * @return 返回商品list
      */
     List<Goods> selectGoodsTopThree();
+    
+    int selectGoodsCount();
 }

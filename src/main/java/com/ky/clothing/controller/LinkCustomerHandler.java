@@ -4,6 +4,8 @@ import com.ky.clothing.entity.Goods;
 import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.GoodsAssessService;
 import com.ky.clothing.service.GoodsService;
+import com.ky.clothing.util.IntegerUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +38,14 @@ public class LinkCustomerHandler {
         //TODO 判断pagesNow和pageSize是否有效，IntegerUtil
         //TODO 调用GoodsService获取当前页，对应页大小的数据
         //TODO 将数据存入session中SysParamEnum.SESSION_GOODS_LIST_NAME
-
+    	if(IntegerUtil.isValid(pageNow)&&IntegerUtil.isValid(pageSize))
+    	{
+    		List<Goods> goodlist1 = goodsService.selectGoodsLimit(pageNow, pageSize);
+    		HttpSession session = request.getSession();
+    		session.setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(),goodlist1);   	
+    		int count = goodsService.selectGoodsCount();
+    		session.setAttribute(SysParamEnum.SESSION_GOODS_COUNT.toString(),count);
+    	}
         return "/pages/clothes";
     }
 
