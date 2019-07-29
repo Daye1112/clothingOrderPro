@@ -44,7 +44,6 @@ public class UserHandler {
     @RequestMapping(value = "/file/avatar", method = RequestMethod.POST)
     public ModelAndView modifyAvatar(String imgBase, String imgName, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             //1. 判断空值
             if (StringUtil.isEmpty(imgBase) || StringUtil.isEmpty(imgName) || !FileUtil.checkImageSuffix(imgName)) {
                 modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请选择图片");
@@ -85,11 +84,7 @@ public class UserHandler {
                     }//9. 判断文件是否保存成功 End
                 }//6. 判断创建文件名是否成功 End
             }//1. 判断空值 End
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            //异常反馈
-            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "图片上传失败");
-        }
+
         //设置跳转页面
         modelAndView.setViewName("/pages/user_info");
         //进行跳转
@@ -106,7 +101,6 @@ public class UserHandler {
     @RequestMapping(value = "/signUp", method = RequestMethod.POST)
     public ModelAndView userSignUp(User user, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             //1. 空值验证
             if (StringUtil.isEmpty(user.getLoginAccount()) || StringUtil.isEmpty(user.getEmail()) || StringUtil.isEmpty(user.getPassword())) {
                 modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请填写全信息");
@@ -135,11 +129,6 @@ public class UserHandler {
                     sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "注册账号", "/user/signUp", "注册成功"));
                 }//if 邮箱、账号查重 End
             }//if 空值验证 End
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            //异常反馈
-            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "注册失败，操作异常");
-        }
         modelAndView.setViewName("pages/sign_up");
         return modelAndView;
     }
@@ -156,7 +145,6 @@ public class UserHandler {
     @RequestMapping(value = "/update/pwd", method = RequestMethod.POST)
     public ModelAndView userUpdatePassword(String oldPassword, String newPassword, String newPasswordCheck, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
             //判断是否存在空值
             if (StringUtil.isEmpty(oldPassword) || StringUtil.isEmpty(newPassword) || StringUtil.isEmpty(newPasswordCheck)) {
@@ -181,11 +169,6 @@ public class UserHandler {
                     }//判断输入的原密码与当前密码是否一致End
                 }////判断两个密码是否一致End
             }//空值判断End
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            //异常反馈
-            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "更新失败，操作异常");
-        }
         //设置跳转页面
         modelAndView.setViewName("/pages/user_info");
         //进行跳转
@@ -260,10 +243,6 @@ public class UserHandler {
         } catch (IncorrectCredentialsException ice) {
             //密码错误
             modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "密码错误！");
-        } catch (Exception e) {
-            //其他异常
-            LOGGER.error("", e);
-            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "未知异常信息！");
         }
         //判断用户是否登录成功
         if (subject.isAuthenticated()) {

@@ -78,16 +78,11 @@ public class CartHandler {
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public ModelAndView prepareUserCart(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             //查询用户的购物车信息
             List<Map<String, Object>> cartList = cartService.findBaseInfoByUserId(((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId());
             //存入session
             request.getSession().setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.setViewName("pages/500");
-            return modelAndView;
-        }
+
         modelAndView.setViewName("pages/cart");
         return modelAndView;
     }
@@ -101,7 +96,6 @@ public class CartHandler {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView addGoodsToCart(Cart cart, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try {
             //1. 空值判断
             if (IntegerUtil.isNotValid(cart.getGoodsId()) || IntegerUtil.isNotValid(cart.getCartGoodsNum())
                     || StringUtil.isEmpty(cart.getCartGoodsSize())){
@@ -124,11 +118,7 @@ public class CartHandler {
                     cartService.updateCartGoodsNumInc(checkCartIsNew);
                 } // if 4 end
             }// if 1 end
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.setViewName("pages/500");
-            return modelAndView;
-        }
+
         modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
     }

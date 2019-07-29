@@ -66,7 +66,6 @@ public class LinkCustomerHandler {
      */
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String toHome(HttpServletRequest request){
-        try{
             //查询前三的goods
             List<Goods> goodsList = goodsService.selectGoodsTopThree();
             //存入session
@@ -75,10 +74,7 @@ public class LinkCustomerHandler {
             List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoTopFour();
             //存入session中
             request.getSession().setAttribute(SysParamEnum.SESSION_ASSESSES_NAME.toString(), assessList);
-        }catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            return "/pages/500";
-        }
+
         return "/pages/home";
     }
 

@@ -40,7 +40,6 @@ public class GoodsHandler {
     public ModelAndView prepareGoodsForGoodsInfo(@PathVariable("goodsId") Integer goodsId, HttpServletRequest request){
         //创建对象
         ModelAndView modelAndView = new ModelAndView();
-        try{
             //查询商品信息
             Goods goods = goodsService.selectByPrimaryKey(goodsId);
             //存入session中
@@ -49,12 +48,7 @@ public class GoodsHandler {
             List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoByGoodsId(goodsId);
             //存入session中
             request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_ASSESSES_NAME.toString(), assessList);
-        }catch (Exception e){
-            //异常处理
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.setViewName("/pages/500");
-            return modelAndView;
-        }
+
         //设置跳转目标
         modelAndView.setViewName("/pages/good_info");
         //跳转
