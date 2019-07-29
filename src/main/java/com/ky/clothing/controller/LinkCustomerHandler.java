@@ -29,7 +29,7 @@ public class LinkCustomerHandler {
     private GoodsAssessService goodsAssessService;
 
     @RequestMapping(value = "/clothes/{pageNow}/{pageSize}", method = RequestMethod.GET)
-    public String toClothes(@PathVariable("pageNow") Integer pageNow, @PathVariable("pageSize")Integer pageSize, HttpServletRequest request){
+    public String toClothes(@PathVariable("pageNow") Integer pageNow, @PathVariable("pageSize") Integer pageSize, HttpServletRequest request) {
         //TODO 判断pagesNow和pageSize是否有效，IntegerUtil
         //TODO 调用GoodsService获取当前页，对应页大小的数据
         //TODO 将数据存入session中SysParamEnum.SESSION_GOODS_LIST_NAME
@@ -41,7 +41,7 @@ public class LinkCustomerHandler {
      * 跳转到注册页面
      */
     @RequestMapping(value = "/signUp", method = RequestMethod.GET)
-    public String toSignUp(){
+    public String toSignUp() {
         return "pages/sign_up";
     }
 
@@ -49,7 +49,7 @@ public class LinkCustomerHandler {
      * 跳转到忘记密码修改密码页面
      */
     @RequestMapping(value = "/forgot/pwd/modify", method = RequestMethod.GET)
-    public String toForgotPasswordModify(){
+    public String toForgotPasswordModify() {
         return "/pages/forgot_password_modify";
     }
 
@@ -57,7 +57,7 @@ public class LinkCustomerHandler {
      * 跳转到忘记密码页面
      */
     @RequestMapping(value = "/forgot/pwd", method = RequestMethod.GET)
-    public String toForgotPassword(){
+    public String toForgotPassword() {
         return "/pages/forgot_password";
     }
 
@@ -65,16 +65,15 @@ public class LinkCustomerHandler {
      * 跳转到主页
      */
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String toHome(HttpServletRequest request){
-            //查询前三的goods
-            List<Goods> goodsList = goodsService.selectGoodsTopThree();
-            //存入session
-            request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(), goodsList);
-            //查询前四的评论
-            List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoTopFour();
-            //存入session中
-            request.getSession().setAttribute(SysParamEnum.SESSION_ASSESSES_NAME.toString(), assessList);
-
+    public String toHome(HttpServletRequest request) {
+        //查询前三的goods
+        List<Goods> goodsList = goodsService.selectGoodsTopThree();
+        //存入session
+        request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(), goodsList);
+        //查询前四的评论
+        List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoTopFour();
+        //存入session中
+        request.getSession().setAttribute(SysParamEnum.SESSION_ASSESSES_NAME.toString(), assessList);
         return "/pages/home";
     }
 
@@ -82,7 +81,7 @@ public class LinkCustomerHandler {
      * 跳转到联系我们页面
      */
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public String toContact(){
+    public String toContact() {
         return "/pages/contact_us";
     }
 

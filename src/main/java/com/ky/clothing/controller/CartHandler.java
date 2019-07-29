@@ -31,40 +31,29 @@ public class CartHandler {
     private CartService cartService;
 
     @RequestMapping(value = "/clear", method = RequestMethod.GET)
-    public ModelAndView clearCart(HttpServletRequest request){
+    public ModelAndView clearCart(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try{
-            User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
-            cartService.deleteByUserId(user.getUserId());
-            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已清空购物车");
-        }catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.setViewName("pages/500");
-            return modelAndView;
-        }
+        User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+        cartService.deleteByUserId(user.getUserId());
+        request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已清空购物车");
         modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
     }
 
     /**
      * 根据购物车id删除购物车
+     *
      * @param cartId 购物车id
      * @return 返回modelAndView
      */
     @RequestMapping(value = "/del/{cartId}", method = RequestMethod.GET)
-    public ModelAndView delCartByCartId(@PathVariable("cartId") Integer cartId, HttpServletRequest request){
+    public ModelAndView delCartByCartId(@PathVariable("cartId") Integer cartId, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        try{
-            if(IntegerUtil.isNotValid(cartId)){
-                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请选择要删除的商品");
-            } else{
-                cartService.deleteByCartId(cartId);
-                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已删除该商品");
-            }
-        }catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            modelAndView.setViewName("pages/500");
-            return modelAndView;
+        if (IntegerUtil.isNotValid(cartId)) {
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请选择要删除的商品");
+        } else {
+            cartService.deleteByCartId(cartId);
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已删除该商品");
         }
         modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
@@ -72,53 +61,53 @@ public class CartHandler {
 
     /**
      * 跳转到用户的购物车页面，同时准备好购物车的数据
+     *
      * @param request request域
      * @return 返回modelAndView
      */
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public ModelAndView prepareUserCart(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            //查询用户的购物车信息
-            List<Map<String, Object>> cartList = cartService.findBaseInfoByUserId(((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId());
-            //存入session
-            request.getSession().setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
-
+        //查询用户的购物车信息
+        List<Map<String, Object>> cartList = cartService.findBaseInfoByUserId(((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId());
+        //存入session
+        request.getSession().setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
         modelAndView.setViewName("pages/cart");
         return modelAndView;
     }
 
     /**
      * 添加商品到用户购物车中
-     * @param cart 购物车对象
+     *
+     * @param cart    购物车对象
      * @param request 请求域
      * @return modelAndView
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView addGoodsToCart(Cart cart, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            //1. 空值判断
-            if (IntegerUtil.isNotValid(cart.getGoodsId()) || IntegerUtil.isNotValid(cart.getCartGoodsNum())
-                    || StringUtil.isEmpty(cart.getCartGoodsSize())){
-                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请选择要加入购物车的商品和尺寸");
-            } else{
-                //2. 从session中取出用户信息
-                User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
-                //3. 将用户id设置入cart对象中
-                cart.setUserId(user.getUserId());
-                //4. 判断用户是否加入了同一个size的同一件商品进入购物车
-                Cart checkCartIsNew = cartService.checkCartIsNew(cart);
-                if(checkCartIsNew == null){
-                    //5. 如果无重复商品，插入新的记录
-                    cartService.addCart(cart);
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> shopInfo = (Map<String, Object>) request.getSession().getAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString());
-                    shopInfo.put("cartCnt", (int)shopInfo.get("cartCnt") + 1);
-                } else{
-                    //6. 如果有同商品，商品num++
-                    cartService.updateCartGoodsNumInc(checkCartIsNew);
-                } // if 4 end
-            }// if 1 end
-
+        //1. 空值判断
+        if (IntegerUtil.isNotValid(cart.getGoodsId()) || IntegerUtil.isNotValid(cart.getCartGoodsNum())
+                || StringUtil.isEmpty(cart.getCartGoodsSize())) {
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请选择要加入购物车的商品和尺寸");
+        } else {
+            //2. 从session中取出用户信息
+            User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+            //3. 将用户id设置入cart对象中
+            cart.setUserId(user.getUserId());
+            //4. 判断用户是否加入了同一个size的同一件商品进入购物车
+            Cart checkCartIsNew = cartService.checkCartIsNew(cart);
+            if (checkCartIsNew == null) {
+                //5. 如果无重复商品，插入新的记录
+                cartService.addCart(cart);
+                @SuppressWarnings("unchecked")
+                Map<String, Object> shopInfo = (Map<String, Object>) request.getSession().getAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString());
+                shopInfo.put("cartCnt", (int) shopInfo.get("cartCnt") + 1);
+            } else {
+                //6. 如果有同商品，商品num++
+                cartService.updateCartGoodsNumInc(checkCartIsNew);
+            } // if 4 end
+        }// if 1 end
         modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
     }

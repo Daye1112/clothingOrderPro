@@ -36,6 +36,7 @@ public class UserHandler {
 
     /**
      * 用户修改头像
+     *
      * @param imgBase 转码后的base64编码
      * @param imgName 文件名
      * @param request 请求域
@@ -44,47 +45,46 @@ public class UserHandler {
     @RequestMapping(value = "/file/avatar", method = RequestMethod.POST)
     public ModelAndView modifyAvatar(String imgBase, String imgName, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            //1. 判断空值
-            if (StringUtil.isEmpty(imgBase) || StringUtil.isEmpty(imgName) || !FileUtil.checkImageSuffix(imgName)) {
-                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请选择图片");
+        //1. 判断空值
+        if (StringUtil.isEmpty(imgBase) || StringUtil.isEmpty(imgName) || !FileUtil.checkImageSuffix(imgName)) {
+            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请选择图片");
+        } else {
+            //2. 获取当前时间yyyyMMddHHmmssSS
+            String nowDate = DateUtil.getNowTimeContinuous();
+            //3. 确定uploads文件夹位置
+            String rootPath = request.getSession().getServletContext().getRealPath("static/uploads/");
+            //4. 获取当年当月的文件夹路径
+            String dateFilePath = FileUtil.getDateFilePath(rootPath);
+            //5. 判断文件夹是否存在，若不存在则创建
+            boolean createFileFlag = FileUtil.createFile(dateFilePath);
+            //6. 判断创建文件名是否成功
+            if (!createFileFlag) {
+                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "文件创建失败,请联系管理员");
             } else {
-                //2. 获取当前时间yyyyMMddHHmmssSS
-                String nowDate = DateUtil.getNowTimeContinuous();
-                //3. 确定uploads文件夹位置
-                String rootPath = request.getSession().getServletContext().getRealPath("static/uploads/");
-                //4. 获取当年当月的文件夹路径
-                String dateFilePath = FileUtil.getDateFilePath(rootPath);
-                //5. 判断文件夹是否存在，若不存在则创建
-                boolean createFileFlag = FileUtil.createFile(dateFilePath);
-                //6. 判断创建文件名是否成功
-                if(!createFileFlag){
-                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "文件创建失败,请联系管理员");
-                } else{
-                    //6. 获取user
-                    User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
-                    //7. 创建新文件名
-                    String newFileName = user.getLoginAccount() + "_" + nowDate + imgName.substring(imgName.lastIndexOf("."));
-                    //8. 图片转码并存入文件夹中
-                    boolean saveImgFlag = ImgBaseUtil.GenerateImage(imgBase.split(",")[1], dateFilePath + "/" + newFileName);
-                    //9. 判断文件是否保存成功
-                    if(!saveImgFlag){
-                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "图片保存失败，请联系管理员");
-                    } else{
-                        //10. 获取文件的相对路径
-                        Calendar date = Calendar.getInstance();
-                        String newImgPath = "/static/uploads/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH)+1) + "/" + newFileName;
-                        //11. 将文件的相对路径存入user对象中
-                        user.setAvatarUrl(newImgPath);
-                        //12. 调用service层，进行保存
-                        userService.updateAvatarUrlByUserId(user);
-                        //14. 记录操作到日志表中
-                        sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "更新头像", "/user/file/avatar", "修改头像成功"));
-                        //15. 返回提示
-                        modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "头像修改成功！");
-                    }//9. 判断文件是否保存成功 End
-                }//6. 判断创建文件名是否成功 End
-            }//1. 判断空值 End
-
+                //6. 获取user
+                User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+                //7. 创建新文件名
+                String newFileName = user.getLoginAccount() + "_" + nowDate + imgName.substring(imgName.lastIndexOf("."));
+                //8. 图片转码并存入文件夹中
+                boolean saveImgFlag = ImgBaseUtil.GenerateImage(imgBase.split(",")[1], dateFilePath + "/" + newFileName);
+                //9. 判断文件是否保存成功
+                if (!saveImgFlag) {
+                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "图片保存失败，请联系管理员");
+                } else {
+                    //10. 获取文件的相对路径
+                    Calendar date = Calendar.getInstance();
+                    String newImgPath = "/static/uploads/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/" + newFileName;
+                    //11. 将文件的相对路径存入user对象中
+                    user.setAvatarUrl(newImgPath);
+                    //12. 调用service层，进行保存
+                    userService.updateAvatarUrlByUserId(user);
+                    //14. 记录操作到日志表中
+                    sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "更新头像", "/user/file/avatar", "修改头像成功"));
+                    //15. 返回提示
+                    modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "头像修改成功！");
+                }//9. 判断文件是否保存成功 End
+            }//6. 判断创建文件名是否成功 End
+        }//1. 判断空值 End
         //设置跳转页面
         modelAndView.setViewName("/pages/user_info");
         //进行跳转
@@ -101,34 +101,34 @@ public class UserHandler {
     @RequestMapping(value = "/signUp", method = RequestMethod.POST)
     public ModelAndView userSignUp(User user, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            //1. 空值验证
-            if (StringUtil.isEmpty(user.getLoginAccount()) || StringUtil.isEmpty(user.getEmail()) || StringUtil.isEmpty(user.getPassword())) {
-                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请填写全信息");
-            } else {  //无空值
-                //2. 邮箱、账号查重
-                boolean checkLoginAccountRepeat = userService.checkLoginAccountRepeat(user.getLoginAccount());
-                boolean checkEmailRepeat = userService.checkEmailRepeat(user.getEmail());
-                if (checkEmailRepeat || checkLoginAccountRepeat) {
-                    //2.1 根据不同的重复来进行提示
-                    if (checkEmailRepeat && checkLoginAccountRepeat) {
-                        //都重复
-                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "您的账号和邮箱都已存在");
-                    } else if (checkEmailRepeat) {
-                        //邮箱重复
-                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱已被其他账号绑定，请核对<br/>如有疑问请联系客服");
-                    } else if (checkLoginAccountRepeat) {
-                        //账号重复
-                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "账号已存在，请修改");
-                    }//if 根据不同的重复来进行提示 End
-                } else { //不存在重复
-                    //3. 插入数据
-                    userService.signUp(user);
-                    //4. 设置返回值
-                    modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "注册成功！<a href='" + request.getContextPath() + "/userLink/login'>前往登录</a>");
-                    //5. 记录日志
-                    sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "注册账号", "/user/signUp", "注册成功"));
-                }//if 邮箱、账号查重 End
-            }//if 空值验证 End
+        //1. 空值验证
+        if (StringUtil.isEmpty(user.getLoginAccount()) || StringUtil.isEmpty(user.getEmail()) || StringUtil.isEmpty(user.getPassword())) {
+            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请填写全信息");
+        } else {  //无空值
+            //2. 邮箱、账号查重
+            boolean checkLoginAccountRepeat = userService.checkLoginAccountRepeat(user.getLoginAccount());
+            boolean checkEmailRepeat = userService.checkEmailRepeat(user.getEmail());
+            if (checkEmailRepeat || checkLoginAccountRepeat) {
+                //2.1 根据不同的重复来进行提示
+                if (checkEmailRepeat && checkLoginAccountRepeat) {
+                    //都重复
+                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "您的账号和邮箱都已存在");
+                } else if (checkEmailRepeat) {
+                    //邮箱重复
+                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱已被其他账号绑定，请核对<br/>如有疑问请联系客服");
+                } else if (checkLoginAccountRepeat) {
+                    //账号重复
+                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "账号已存在，请修改");
+                }//if 根据不同的重复来进行提示 End
+            } else { //不存在重复
+                //3. 插入数据
+                userService.signUp(user);
+                //4. 设置返回值
+                modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "注册成功！<a href='" + request.getContextPath() + "/userLink/login'>前往登录</a>");
+                //5. 记录日志
+                sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "注册账号", "/user/signUp", "注册成功"));
+            }//if 邮箱、账号查重 End
+        }//if 空值验证 End
         modelAndView.setViewName("pages/sign_up");
         return modelAndView;
     }
@@ -145,30 +145,30 @@ public class UserHandler {
     @RequestMapping(value = "/update/pwd", method = RequestMethod.POST)
     public ModelAndView userUpdatePassword(String oldPassword, String newPassword, String newPasswordCheck, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
-            //判断是否存在空值
-            if (StringUtil.isEmpty(oldPassword) || StringUtil.isEmpty(newPassword) || StringUtil.isEmpty(newPasswordCheck)) {
-                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请输入必要信息");
-            } else {    //没有空值
-                //判断两个密码是否一致
-                if (!newPassword.equals(newPasswordCheck)) {
-                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "两次密码输入不一致");
-                } else { //密码一致
-                    //判断输入的原密码与当前密码是否一致
-                    if (!oldPassword.equals(user.getPassword())) {
-                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "原密码错误");
-                    } else { //与当前密码一致
-                        //提交到service进行修改
-                        int changeCnt = userService.updatePasswordByUserId(user.getUserId(), newPassword);
-                        //更新session中的user密码
-                        user.setPassword(newPassword);
-                        //添加提示反馈
-                        modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "密码修改成功");
-                        //在日志中记录用户操作
-                        sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "修改个人密码", "/user/update/pwd", "修改个人密码成功：" + oldPassword + "->" + newPassword));
-                    }//判断输入的原密码与当前密码是否一致End
-                }////判断两个密码是否一致End
-            }//空值判断End
+        User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+        //判断是否存在空值
+        if (StringUtil.isEmpty(oldPassword) || StringUtil.isEmpty(newPassword) || StringUtil.isEmpty(newPasswordCheck)) {
+            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "请输入必要信息");
+        } else {    //没有空值
+            //判断两个密码是否一致
+            if (!newPassword.equals(newPasswordCheck)) {
+                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "两次密码输入不一致");
+            } else { //密码一致
+                //判断输入的原密码与当前密码是否一致
+                if (!oldPassword.equals(user.getPassword())) {
+                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "原密码错误");
+                } else { //与当前密码一致
+                    //提交到service进行修改
+                    int changeCnt = userService.updatePasswordByUserId(user.getUserId(), newPassword);
+                    //更新session中的user密码
+                    user.setPassword(newPassword);
+                    //添加提示反馈
+                    modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "密码修改成功");
+                    //在日志中记录用户操作
+                    sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "修改个人密码", "/user/update/pwd", "修改个人密码成功：" + oldPassword + "->" + newPassword));
+                }//判断输入的原密码与当前密码是否一致End
+            }////判断两个密码是否一致End
+        }//空值判断End
         //设置跳转页面
         modelAndView.setViewName("/pages/user_info");
         //进行跳转

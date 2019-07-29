@@ -23,7 +23,6 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> selectGoodsLimit(Integer pageNow, Integer pageSize) {
         //TODO 计算startIndex，开始查询的索引位startIndex = (pageNow - 1) * pageSize
         //TODO 调用goodsMapper，获取数据并返回
-    	
         return null;
     }
 

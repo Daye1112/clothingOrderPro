@@ -29,30 +29,30 @@ public class GoodsAssessHandler {
 
     /**
      * 用户发表商品评论
+     *
      * @param goodsAssess 商品评价信息
-     * @param request 请求域
+     * @param request     请求域
      * @return 返回modelAndView
      */
     @RequestMapping(value = "/publish", method = RequestMethod.POST)
-    public ModelAndView publishAssess(GoodsAssess goodsAssess, HttpServletRequest request){
+    public ModelAndView publishAssess(GoodsAssess goodsAssess, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            System.out.println(goodsAssess);
-            //1. 空值判断
-            if(StringUtil.isEmpty(goodsAssess.getGoodsAssessContent())
-                    || IntegerUtil.isNotValid(goodsAssess.getGoodsAssessScore())
-                    || IntegerUtil.isNotValid(goodsAssess.getGoodsId())){
-                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请填写你的评价");
-            } else{
-                //获取session中的用户信息
-                Integer userId = ((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId();
-                //设置评论的用户信息
-                goodsAssess.setUserId(userId);
-                //2. 插入记录
-                goodsAssessService.insertGoodsAssess(goodsAssess);
-                //设置返回信息
-                request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "评论成功");
-            }
-
+        System.out.println(goodsAssess);
+        //1. 空值判断
+        if (StringUtil.isEmpty(goodsAssess.getGoodsAssessContent())
+                || IntegerUtil.isNotValid(goodsAssess.getGoodsAssessScore())
+                || IntegerUtil.isNotValid(goodsAssess.getGoodsId())) {
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请填写你的评价");
+        } else {
+            //获取session中的用户信息
+            Integer userId = ((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId();
+            //设置评论的用户信息
+            goodsAssess.setUserId(userId);
+            //2. 插入记录
+            goodsAssessService.insertGoodsAssess(goodsAssess);
+            //设置返回信息
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "评论成功");
+        }
         modelAndView.setViewName("redirect:/goods/info/" + goodsAssess.getGoodsId() + ".html");
         return modelAndView;
     }
