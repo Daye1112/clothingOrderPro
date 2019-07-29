@@ -30,6 +30,10 @@ public interface GoodsService {
      * @return 返回商品list
      */
     List<Goods> selectGoodsTopThree();
-    
+
+    /**
+     * 查询商品总数
+     * @return 返回商品总数
+     */
     int selectGoodsCount();
 }

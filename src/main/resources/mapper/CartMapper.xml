@@ -127,7 +127,8 @@
     </select>
     <!--根据用户id查询用户的购物车信息-->
     <select id="findBaseInfoByUserId" resultType="java.util.Map" parameterType="integer">
-        SELECT g.goods_id        goodsId,
+        SELECT c.cart_id         cartId,
+               g.goods_id        goodsId,
                g.goods_image_url goodsImageUrl,
                g.goods_name      goodsName,
                c.cart_goods_size cartGoodsSize,
@@ -155,4 +156,16 @@
         where cart_valid = 1
           and user_id = #{userId}
     </select>
+    <!--根据cartId删除购物车信息-->
+    <update id="deleteByCartId" parameterType="integer">
+        update cart
+        set cart_valid = 0
+        where cart_id = #{cartId,jdbcType=INTEGER}
+    </update>
+    <!--根据用户id清空用户购物车中的所有商品-->
+    <update id="deleteByUserId">
+        update cart
+        set cart_valid = 0
+        where user_id = #{userId}
+    </update>
 </mapper>
