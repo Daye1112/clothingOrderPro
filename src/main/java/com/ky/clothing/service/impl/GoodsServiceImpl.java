@@ -23,8 +23,8 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> selectGoodsLimit(Integer pageNow, Integer pageSize) {
         //TODO 计算startIndex，开始查询的索引位startIndex = (pageNow - 1) * pageSize
         //TODO 调用goodsMapper，获取数据并返回
-    	
-        return null;
+    	Integer startIndex=(pageNow - 1) * pageSize;
+    	return goodsMapper.selectGoodsLimit(startIndex, pageSize);
     }
 
     @Transactional(rollbackFor = Exception.class, readOnly = true)
@@ -43,4 +43,9 @@ public class GoodsServiceImpl implements GoodsService {
     public void setGoodsMapper(GoodsMapper goodsMapper) {
         this.goodsMapper = goodsMapper;
     }
+
+	@Override
+	public int selectGoodsCount() {
+		return goodsMapper.selectGoodsCount();
+	}
 }

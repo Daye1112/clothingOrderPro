@@ -11,7 +11,7 @@ public class MyException {
 	@ExceptionHandler({Exception.class})
 	public String localException(Exception ex){	
 		LOGGER.error(ex.getMessage(), ex);
-		System.out.println("异常信息是" + ex.getMessage());
+		//System.out.println("异常信息是" + ex.getMessage());
 		return "/pages/500";
 	}
 }

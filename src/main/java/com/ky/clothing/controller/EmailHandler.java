@@ -102,10 +102,8 @@ public class EmailHandler {
                     //4. 将随机数和user存入session
                     request.getSession().setAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString(), randomNumber);
                     request.getSession().setAttribute(SysParamEnum.SESSION_USER_NAME.toString(), user);
-                    //4.5 获取修改密码页面的全路径
-                    String modifyPath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath() + "/customerLink/forgot/pwd/modify.html";
                     //5. 发送邮件
-                    SendMailUtil.sendEmil(email, randomNumber, modifyPath);
+                    SendMailUtil.sendEmil(email, randomNumber);
                     //6. 设置返回提示
                     modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "已发送验证码至您的邮箱<br/>请根据邮箱提示进行密码修改操作");
                     //7. 插入日志记录

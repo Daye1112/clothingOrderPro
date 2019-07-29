@@ -176,6 +176,15 @@
     </update>
     <!--分页查询商品记录-->
     <select id="selectGoodsLimit" resultMap="BaseResultMap">
-
+		select goods_id, goods_no, goods_name, goods_image_url, goods_price, goods_score
+        from goods
+        order by goods_score
+        limit #{startIndex},#{pageSize}
+    </select>
+    
+    <!-- 分页查询商品记录总条数 -->
+    <select id="selectGoodsCount" resultType="int">
+    	select count(*) 
+    	from goods  	
     </select>
 </mapper>
