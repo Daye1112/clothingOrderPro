@@ -168,4 +168,11 @@
         set cart_valid = 0
         where user_id = #{userId}
     </update>
+    <!--根据cartId修改cartGoodsNum的值-->
+    <update id="updateCartGoodsNumByCartId" parameterType="cart">
+        update cart
+        set cart_goods_num = #{cartGoodsNum}
+        where cart_valid = 1
+          and cart_id = #{cartId}
+    </update>
 </mapper>
