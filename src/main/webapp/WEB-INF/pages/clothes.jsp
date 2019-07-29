@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="<%=path%>/static/styles/bootstrap4/bootstrap.min.css">
     <link href="<%=path%>/static/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="<%=path%>/static/plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
+    <link href="<%=path%>/static/plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet"
+          type="text/css">
     <link rel="stylesheet" type="text/css" href="<%=path%>/static/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="<%=path%>/static/styles/categories.css">
     <link rel="stylesheet" type="text/css" href="<%=path%>/static/styles/categories_responsive.css">
@@ -28,7 +29,8 @@
         <!-- Home -->
 
         <div class="home">
-            <div class="home_background parallax-window" data-parallax="scroll" data-image-src="<%=path%>/static/images/categories.jpg"
+            <div class="home_background parallax-window" data-parallax="scroll"
+                 data-image-src="<%=path%>/static/images/categories.jpg"
                  data-speed="0.8"></div>
             <div class="container">
                 <div class="row">
@@ -60,7 +62,8 @@
                                     <ul>
                                         <!-- Best Seller Item -->
                                         <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_1.jpg" alt=""></div>
+                                            <div class="best_image"><img src="<%=path%>/static/images/best_1.jpg"
+                                                                         alt=""></div>
                                             <div class="best_content">
                                                 <div class="best_title"><a href="">Blue dress with dots</a>
                                                 </div>
@@ -71,7 +74,8 @@
 
                                         <!-- Best Seller Item -->
                                         <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_2.jpg" alt=""></div>
+                                            <div class="best_image"><img src="<%=path%>/static/images/best_2.jpg"
+                                                                         alt=""></div>
                                             <div class="best_content">
                                                 <div class="best_title"><a href="">White t-shirt</a></div>
                                                 <div class="best_price">$45</div>
@@ -81,7 +85,8 @@
 
                                         <!-- Best Seller Item -->
                                         <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_3.jpg" alt=""></div>
+                                            <div class="best_image"><img src="<%=path%>/static/images/best_3.jpg"
+                                                                         alt=""></div>
                                             <div class="best_content">
                                                 <div class="best_title"><a href="">Blue dress with dots</a>
                                                 </div>
@@ -92,7 +97,8 @@
 
                                         <!-- Best Seller Item -->
                                         <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_4.jpg" alt=""></div>
+                                            <div class="best_image"><img src="<%=path%>/static/images/best_4.jpg"
+                                                                         alt=""></div>
                                             <div class="best_content">
                                                 <div class="best_title"><a href="">White t-shirt</a></div>
                                                 <div class="best_price">$45</div>
@@ -110,7 +116,8 @@
 
                                     <!-- Option Item -->
                                     <div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
-                                        <div class="option_image"><img src="<%=path%>/static/images/option_1.png" alt=""></div>
+                                        <div class="option_image"><img src="<%=path%>/static/images/option_1.png"
+                                                                       alt=""></div>
                                         <div class="option_content">
                                             <div class="option_title">30天退换</div>
                                             <div class="option_subtitle">无条件退货</div>
@@ -119,7 +126,8 @@
 
                                     <!-- Option Item -->
                                     <div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
-                                        <div class="option_image"><img src="<%=path%>/static/images/option_2.png" alt=""></div>
+                                        <div class="option_image"><img src="<%=path%>/static/images/option_2.png"
+                                                                       alt=""></div>
                                         <div class="option_content">
                                             <div class="option_title">免费定制</div>
                                             <div class="option_subtitle">定制不加价</div>
@@ -128,7 +136,8 @@
 
                                     <!-- Option Item -->
                                     <div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
-                                        <div class="option_image"><img src="<%=path%>/static/images/option_3.png" alt=""></div>
+                                        <div class="option_image"><img src="<%=path%>/static/images/option_3.png"
+                                                                       alt=""></div>
                                         <div class="option_content">
                                             <div class="option_title">安全付款</div>
                                             <div class="option_subtitle">无需担心</div>
@@ -137,7 +146,8 @@
 
                                     <!-- Option Item -->
                                     <div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
-                                        <div class="option_image"><img src="<%=path%>/static/images/option_4.png" alt=""></div>
+                                        <div class="option_image"><img src="<%=path%>/static/images/option_4.png"
+                                                                       alt=""></div>
                                         <div class="option_content">
                                             <div class="option_title">全天候支持</div>
                                             <div class="option_subtitle">随时联系我们</div>
@@ -195,95 +205,107 @@
 
                         <div class="product_grid">
                             <c:forEach items="${sessionScope.goodsList}" var="goods">
-                        	<!-- Product -->
-                           		<div class="product">
-                               		<div class="product_image">
-                                   		<img src="<%=path%>${goods.goodsImageUrl}" alt="">
-                               	</div>
-                               	<div class="rating rating_${goods.goodsScore}">
-                                   	<i class="fa fa-star"></i>
-                                   	<i class="fa fa-star"></i>
-                                   	<i class="fa fa-star"></i>
-                                   	<i class="fa fa-star"></i>
-                                   	<i class="fa fa-star"></i>
-                               	</div>
-                               		<div class="product_content clearfix">
-                                   		<div class="product_info">
-                                       		<div class="product_name"><a href="">${goods.goodsName}</a></div>
-                                       		<div class="product_price">￥${goods.goodsPrice}</div>
-                                   		</div>
-                                   		<div class="product_options">
-                                       		<a href="<%=path%>/goods/info/${goods.goodsId}.html"><div class="product_buy product_option"><img
-                                               	src="<%=path%>/static/images/shopping-bag-white.svg" alt=""></div></a>
-                                       		<div class="product_fav product_option"><img width="60%" src="<%=path%>/static/images/star.svg" alt=""></div>
-                                   		</div>
-                               		</div>
-                           		</div>
-                    		</c:forEach>
-                    		<% request.getSession().removeAttribute("goodsList");%>
+                                <!-- Product -->
+                                <div class="product">
+                                    <div class="product_image">
+                                        <img src="<%=path%>${goods.goodsImageUrl}" alt="">
+                                    </div>
+                                    <div class="rating rating_${goods.goodsScore}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="product_content clearfix">
+                                        <div class="product_info">
+                                            <div class="product_name"><a href="">${goods.goodsName}</a></div>
+                                            <div class="product_price">￥${goods.goodsPrice}</div>
+                                        </div>
+                                        <div class="product_options">
+                                            <a href="<%=path%>/goods/info/${goods.goodsId}.html">
+                                                <div class="product_buy product_option"><img
+                                                        src="<%=path%>/static/images/shopping-bag-white.svg" alt="">
+                                                </div>
+                                            </a>
+                                            <div class="product_fav product_option"><img width="60%"
+                                                                                         src="<%=path%>/static/images/star.svg"
+                                                                                         alt=""></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                            <% request.getSession().removeAttribute("goodsList");%>
                         </div>
 
-                     </div>
-                </div>
-
-                </div>
-
-                <div class="row page_num_container">
-                    <div class="col text-right">
-                        <ul class="page_nums">
-
-                        	<%
-                        		int count=(int)request.getSession().getAttribute("goodsCount");
-                        		int pages=(count%12==0?count/12:count/12+1);
-                        		for(int i=1;i<=pages;i++)
-                        		{
-                        	%>                     	
-                        		<li><a href="<%=path%>/customerLink/clothes/<%=i %>/12.html"><%=i %></a></li>
-                     	 
-                        	 <% 
-                        		}
-                        	 %>
-                        </ul>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Sidebar Right -->
+            <div class="row page_num_container">
+                <div class="col text-center">
+                    <ul class="page_nums">
+                        <c:set var="count" value="${sessionScope.goodsCount}"/>
+                        <c:set var="pages" value="${count%12==0?count/12:count/12+1}"/>
+                        <c:forEach begin="1" end="${pages}" step="1" var="i">
+                            <li><a href="<%=path%>/customerLink/clothes/${i}/12.html" style="font-size: large;">${i}</a></li>
+                        </c:forEach>
+                        <%--<%--%>
+                            <%--int count = (int) request.getSession().getAttribute("goodsCount");--%>
+                            <%--int pages = (count % 12 == 0 ? count / 12 : count / 12 + 1);--%>
+                            <%--for (int i = 1; i <= pages; i++) {--%>
+                        <%--%>--%>
 
-            <div class="sidebar_right clearfix">
+                        <%--<li><a href="<%=path%>/customerLink/clothes/<%=i %>/12.html" style="font-size: large;"><%=i %>--%>
+                        <%--</a></li>--%>
 
-                <!-- Promo 1 -->
-                <div class="sidebar_promo_1 sidebar_promo d-flex flex-column align-items-center justify-content-center">
-                    <div class="sidebar_promo_image" style="background-image: url(<%=path%>/static/images/sidebar_promo_1.jpg)"></div>
-                    <div class="sidebar_promo_content text-center">
-                        <div class="sidebar_promo_title">30%<span>off</span></div>
-                        <div class="sidebar_promo_subtitle">On all shoes</div>
-                        <div class="sidebar_promo_button"><a href="">check out</a></div>
-                    </div>
-                </div>
-
-                <!-- Promo 2 -->
-                <div class="sidebar_promo_2 sidebar_promo">
-                    <div class="sidebar_promo_image" style="background-image: url(<%=path%>/static/images/sidebar_promo_2.jpg)"></div>
-                    <div class="sidebar_promo_content text-center">
-                        <div class="sidebar_promo_title">30%<span>off</span></div>
-                        <div class="sidebar_promo_subtitle">On all shoes</div>
-                        <div class="sidebar_promo_button"><a href="">check out</a></div>
-                    </div>
+                        <%--<%--%>
+                            <%--}--%>
+                        <%--%>--%>
+                    </ul>
                 </div>
             </div>
 
         </div>
 
-        <!-- Extra -->
+        <!-- Sidebar Right -->
+
+        <div class="sidebar_right clearfix">
+
+            <!-- Promo 1 -->
+            <div class="sidebar_promo_1 sidebar_promo d-flex flex-column align-items-center justify-content-center">
+                <div class="sidebar_promo_image"
+                     style="background-image: url(<%=path%>/static/images/sidebar_promo_1.jpg)"></div>
+                <div class="sidebar_promo_content text-center">
+                    <div class="sidebar_promo_title">30%<span>off</span></div>
+                    <div class="sidebar_promo_subtitle">On all shoes</div>
+                    <div class="sidebar_promo_button"><a href="">check out</a></div>
+                </div>
+            </div>
+
+            <!-- Promo 2 -->
+            <div class="sidebar_promo_2 sidebar_promo">
+                <div class="sidebar_promo_image"
+                     style="background-image: url(<%=path%>/static/images/sidebar_promo_2.jpg)"></div>
+                <div class="sidebar_promo_content text-center">
+                    <div class="sidebar_promo_title">30%<span>off</span></div>
+                    <div class="sidebar_promo_subtitle">On all shoes</div>
+                    <div class="sidebar_promo_button"><a href="">check out</a></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Extra -->
 
 
-        <!-- Newsletter -->
-        <jsp:include page="module/news_letter.jsp"/>
+    <!-- Newsletter -->
+    <jsp:include page="module/news_letter.jsp"/>
 
-        <!-- Footer -->
-        <jsp:include page="module/footer.jsp"/>
+    <!-- Footer -->
+    <jsp:include page="module/footer.jsp"/>
 
     </div>
 

@@ -20,6 +20,18 @@ public class CartServiceImpl implements CartService {
 
     private CartMapper cartMapper;
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteByUserId(Integer userId) {
+        cartMapper.deleteByUserId(userId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteByCartId(Integer cartId) {
+        cartMapper.deleteByCartId(cartId);
+    }
+
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     @Override
     public List<Map<String, Object>> findBaseInfoByUserId(Integer userId) {
