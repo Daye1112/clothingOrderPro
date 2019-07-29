@@ -32,23 +32,23 @@ public class GoodsHandler {
 
     /**
      * 根据商品id查询商品信息存入session中准备使用
+     *
      * @param goodsId 商品信息
      * @param request 请求域
      * @return 返回modelAndView
      */
     @RequestMapping(value = "/info/{goodsId}", method = RequestMethod.GET)
-    public ModelAndView prepareGoodsForGoodsInfo(@PathVariable("goodsId") Integer goodsId, HttpServletRequest request){
+    public ModelAndView prepareGoodsForGoodsInfo(@PathVariable("goodsId") Integer goodsId, HttpServletRequest request) {
         //创建对象
         ModelAndView modelAndView = new ModelAndView();
-            //查询商品信息
-            Goods goods = goodsService.selectByPrimaryKey(goodsId);
-            //存入session中
-            request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_NAME.toString(), goods);
-            //查询商品评论信息
-            List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoByGoodsId(goodsId);
-            //存入session中
-            request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_ASSESSES_NAME.toString(), assessList);
-
+        //查询商品信息
+        Goods goods = goodsService.selectByPrimaryKey(goodsId);
+        //存入session中
+        request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_NAME.toString(), goods);
+        //查询商品评论信息
+        List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoByGoodsId(goodsId);
+        //存入session中
+        request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_ASSESSES_NAME.toString(), assessList);
         //设置跳转目标
         modelAndView.setViewName("/pages/good_info");
         //跳转

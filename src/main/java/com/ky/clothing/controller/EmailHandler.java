@@ -42,39 +42,38 @@ public class EmailHandler {
     @RequestMapping(value = "/modify/pwd", method = RequestMethod.POST)
     public ModelAndView modifyPwdByEmail(String checkCode, String newPassword, String newPasswordCheck, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-            //0. 空值校验
-            if (StringUtil.isEmpty(checkCode) || StringUtil.isEmpty(newPassword) || StringUtil.isEmpty((newPasswordCheck))) {
-                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "存在空值");
-            } else { //无空值
-                //1. 新密码和确认密码进行核对
-                if (!newPassword.equals(newPasswordCheck)) {
-                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "两次密码不一致");
-                } else { //核对成功
-                    Object sessionCheckCode = request.getSession().getAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString());
-                    //1.5 判断session是否为空
-                    if (sessionCheckCode == null) {
-                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "您已修改过密码或还未请求修改密码");
-                    } else {    //session不为空
-                        //2. checkCode与session中的checkCode校对
-                        if (!(checkCode.trim()).equals(sessionCheckCode.toString().trim())) {
-                            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "验证码错误");
-                        } else { //校队成功
-                            //3. 取出session中的用户信息
-                            User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
-                            //4. 修改密码
-                            userService.updatePasswordByUserId(user.getUserId(), newPassword);
-                            //5. 记录日志
-                            sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "修改密码", "/email/modify/pwd", "通过忘记密码修改了密码"));
-                            //6. 销毁session中的checkCode对象
-                            request.getSession().removeAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString());
-                            request.getSession().removeAttribute(SysParamEnum.SESSION_USER_NAME.toString());
-                            //设置返回值
-                            modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "修改成功！");
-                        }//2. checkCode与session中的checkCode校对 End
-                    }//1.5 判断session是否为空 End
-                }//1. 新密码和确认密码进行核对End
-            }   // 0. 空值校验end
-
+        //0. 空值校验
+        if (StringUtil.isEmpty(checkCode) || StringUtil.isEmpty(newPassword) || StringUtil.isEmpty((newPasswordCheck))) {
+            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "存在空值");
+        } else { //无空值
+            //1. 新密码和确认密码进行核对
+            if (!newPassword.equals(newPasswordCheck)) {
+                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "两次密码不一致");
+            } else { //核对成功
+                Object sessionCheckCode = request.getSession().getAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString());
+                //1.5 判断session是否为空
+                if (sessionCheckCode == null) {
+                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "您已修改过密码或还未请求修改密码");
+                } else {    //session不为空
+                    //2. checkCode与session中的checkCode校对
+                    if (!(checkCode.trim()).equals(sessionCheckCode.toString().trim())) {
+                        modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "验证码错误");
+                    } else { //校队成功
+                        //3. 取出session中的用户信息
+                        User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+                        //4. 修改密码
+                        userService.updatePasswordByUserId(user.getUserId(), newPassword);
+                        //5. 记录日志
+                        sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "修改密码", "/email/modify/pwd", "通过忘记密码修改了密码"));
+                        //6. 销毁session中的checkCode对象
+                        request.getSession().removeAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString());
+                        request.getSession().removeAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+                        //设置返回值
+                        modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "修改成功！");
+                    }//2. checkCode与session中的checkCode校对 End
+                }//1.5 判断session是否为空 End
+            }//1. 新密码和确认密码进行核对End
+        }   // 0. 空值校验end
         modelAndView.setViewName("pages/forgot_password_modify");
         return modelAndView;
     }
@@ -85,34 +84,34 @@ public class EmailHandler {
      * @param email   email地址
      * @param request 请求域
      * @return 返回modelAndView
-     * @throws Exception 
      */
     @RequestMapping(value = "/pwd/send", method = RequestMethod.POST)
     public ModelAndView sendEmailForModifyPwd(String email, HttpServletRequest request) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
-            //1. email空值判断
-            if (StringUtil.isEmpty(email)) {
-                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱不可为空");
-            } else { //不为空值
-                //2. email是否绑定账号
-                User user = userService.selectUserIdByEmail(email);
-                if (user != null) {
-                    //3. 产生6个随机数
-                    String randomNumber = RandomUtil.randomNumber(6);
-                    //4. 将随机数和user存入session
-                    request.getSession().setAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString(), randomNumber);
-                    request.getSession().setAttribute(SysParamEnum.SESSION_USER_NAME.toString(), user);
-                    //5. 发送邮件
-                    SendMailUtil.sendEmil(email, randomNumber);
-                    //6. 设置返回提示
-                    modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "已发送验证码至您的邮箱<br/>请根据邮箱提示进行密码修改操作");
-                    //7. 插入日志记录
-                    sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "发送忘记密码邮件", "/email/pwd/send", "发送改密码邮件至->" + email));
-                } else { //email未绑定账号
-                    modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱未绑定账号");
-                }// email是否绑定账号 End
-            }//email空值判断End
-
+        //1. email空值判断
+        if (StringUtil.isEmpty(email)) {
+            modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱不可为空");
+        } else { //不为空值
+            //2. email是否绑定账号
+            User user = userService.selectUserIdByEmail(email);
+            if (user != null) {
+                //3. 产生6个随机数
+                String randomNumber = RandomUtil.randomNumber(6);
+                //4. 将随机数和user存入session
+                request.getSession().setAttribute(SysParamEnum.SESSION_RANDOM_NUMBER_NAME.toString(), randomNumber);
+                request.getSession().setAttribute(SysParamEnum.SESSION_USER_NAME.toString(), user);
+                //4.5 获取修改密码页面的全路径
+                String modifyPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/customerLink/forgot/pwd/modify.html";
+                //5. 发送邮件
+                SendMailUtil.sendEmil(email, randomNumber, modifyPath);
+                //6. 设置返回提示
+                modelAndView.addObject(SysParamEnum.SUCCEED_MSG_NAME.toString(), "已发送验证码至您的邮箱<br/>请根据邮箱提示进行密码修改操作");
+                //7. 插入日志记录
+                sysLogService.insertSelective(SysLogUtil.initUserSysLog(user, request, "发送忘记密码邮件", "/email/pwd/send", "发送改密码邮件至->" + email));
+            } else { //email未绑定账号
+                modelAndView.addObject(SysParamEnum.ERROR_MSG_NAME.toString(), "邮箱未绑定账号");
+            }// email是否绑定账号 End
+        }//email空值判断End
         modelAndView.setViewName("/pages/forgot_password");
         //6. 跳转
         return modelAndView;

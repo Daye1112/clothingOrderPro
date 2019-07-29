@@ -21,8 +21,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     @Override
     public List<Goods> selectGoodsLimit(Integer pageNow, Integer pageSize) {
-        //TODO 计算startIndex，开始查询的索引位startIndex = (pageNow - 1) * pageSize
-        //TODO 调用goodsMapper，获取数据并返回
     	Integer startIndex=(pageNow - 1) * pageSize;
     	return goodsMapper.selectGoodsLimit(startIndex, pageSize);
     }

@@ -5,13 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * @author cyan-bw
+ */
 @ControllerAdvice
 public class MyException {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GoodsHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MyException.class);
+
 	@ExceptionHandler({Exception.class})
 	public String localException(Exception ex){	
 		LOGGER.error(ex.getMessage(), ex);
-		//System.out.println("异常信息是" + ex.getMessage());
 		return "/pages/500";
 	}
 }
