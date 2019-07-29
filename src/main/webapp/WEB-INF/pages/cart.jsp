@@ -64,6 +64,7 @@
                                     <div class="cart_bar_title_quantity">数量</div>
                                     <div class="cart_bar_title_total">总价</div>
                                     <div class="cart_bar_title_button"></div>
+                                    <div class="cart_bar_title_button"></div>
                                 </div>
                             </div>
                         </div>
@@ -78,10 +79,13 @@
                                     <li class=" cart_product d-flex flex-md-row flex-column align-items-md-center align-items-start justify-content-start">
                                         <!-- Product Image -->
                                         <div class="cart_product_image">
-                                            <img src="<%=path%>${cart.goodsImageUrl}" alt="图片加载中" width="120px" height="120px">
+                                            <img src="<%=path%>${cart.goodsImageUrl}" alt="图片加载中" width="120px"
+                                                 height="120px">
                                         </div>
                                         <!-- Product Name -->
-                                        <div class="cart_product_name"><a target="_blank" href="<%=path%>/goods/info/${cart.goodsId}.html">${cart.goodsName}</a></div>
+                                        <div class="cart_product_name"><a target="_blank"
+                                                                          href="<%=path%>/goods/info/${cart.goodsId}.html">${cart.goodsName}</a>
+                                        </div>
                                         <div class="cart_product_info ml-auto">
                                             <div class="cart_product_info_inner d-flex flex-row align-items-center justify-content-md-end justify-content-start">
                                                 <!-- Product Price -->
@@ -89,28 +93,20 @@
                                                 <div class="cart_product_price">￥${cart.goodsPrice}</div>
                                                 <!-- Product Quantity -->
                                                 <div class="cart_product_price">${cart.cartGoodsNum}</div>
-                                                <%--<div class="product_quantity_container">--%>
-                                                    <%--<div class="product_quantity clearfix">--%>
-                                                        <%--<input id="quantity_input" type="text" pattern="[0-9]*"--%>
-                                                               <%--value="${cart.cartGoodsNum}">--%>
-                                                        <%--<div class="quantity_buttons">--%>
-                                                            <%--<div id="quantity_inc_button"--%>
-                                                                 <%--class="quantity_inc quantity_control"><i--%>
-                                                                    <%--class="fa fa-caret-up" aria-hidden="true"></i></div>--%>
-                                                            <%--<div id="quantity_dec_button"--%>
-                                                                 <%--class="quantity_dec quantity_control"><i--%>
-                                                                    <%--class="fa fa-caret-down" aria-hidden="true"></i>--%>
-                                                            <%--</div>--%>
-                                                        <%--</div>--%>
-                                                    <%--</div>--%>
-                                                <%--</div>--%>
                                                 <!-- Products Total Price -->
                                                 <div class="cart_product_total">￥${cart.totalPrice}</div>
                                                 <c:set value="${allGoodsPrice + cart.totalPrice}" var="allGoodsPrice"/>
                                                 <!-- Product Cart Trash Button -->
                                                 <div class="cart_product_button">
-                                                    <a href="<%=path%>/cart/del/${cart.cartId}.do" class="cart_product_remove">
+                                                    <a href="<%=path%>/cart/del/${cart.cartId}.do"
+                                                       class="cart_product_remove">
                                                         <img src="<%=path%>/static/images/trash.png" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="cart_product_button">
+                                                    <a href="#" name="${cart.cartId}" class="cart_product_edit">
+                                                        <img width="28px" height="28px"
+                                                             src="<%=path%>/static/images/edit.png" alt="">
                                                     </a>
                                                 </div>
                                             </div>
@@ -126,22 +122,12 @@
                     <div class="col">
                         <div class="cart_control_bar d-flex flex-md-row flex-column align-items-start justify-content-start">
                             <a href="<%=path%>/cart/clear.do" style="padding-top: 1%;" class="button_clear cart_button">清空购物车</a>
-                            <!-- <button class="button_update cart_button">update cart</button> -->
-                            <a href="<%=path%>/customerLink/clothes/1/12.html" style="padding-top: 1%;" class="button_update cart_button_2 ml-md-auto">继续购物</a>
+                            <a href="<%=path%>/customerLink/clothes/1/12.html" style="padding-top: 1%;"
+                               class="button_update cart_button_2 ml-md-auto">继续购物</a>
                         </div>
                     </div>
                 </div>
                 <div class="row cart_extra">
-                    <!-- Cart Coupon -->
-                    <!-- <div class="col-lg-6">
-                        <div class="cart_coupon">
-                            <div class="cart_title">coupon code</div>
-                            <form action="#" class="cart_coupon_form d-flex flex-row align-items-start justify-content-start" id="cart_coupon_form">
-                                <input type="text" class="cart_coupon_input" placeholder="Coupon code" required="required">
-                                <button class="button_clear cart_button_2">apply coupon</button>
-                            </form>
-                        </div>
-                    </div> -->
                     <!-- Cart Total -->
                     <div class="col-lg-5 offset-lg-1">
                         <div class="cart_total">
@@ -265,6 +251,28 @@
                 <c:if test="${not empty sessionScope.dealMsg}">
                 layer.msg("${sessionScope.dealMsg}");
                 </c:if>
+            });
+            $(".cart_product_edit").click(function () {
+                var $cartId = $(this).attr("name");
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.open({
+                        title: "修改密码",
+                        type: 1,
+                        skin: '', //样式类名
+                        closeBtn: 1, //不显示关闭按钮
+                        anim: 2,
+                        shadeClose: true, //开启遮罩关闭
+                        content: '<div style="width: 360px;text-align: center;">' +
+                            '<form action="<%=path%>/cart/update/num.do" method="post" style="text-align: center;"><br/>' +
+                            '购买数量：&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="cartGoodsNum"/><br/><br/>' +
+                            '<input type="hidden" name="cartId" value="' + $cartId + '"/>' +
+                            '<input style="margin-top: 5px;width:50%;" class="cart_total_button" type="submit" value="提交"/><br/><br/>' +
+                            '</form>' +
+                            '</div>'
+                    });
+                    return false;
+                });
             });
         })
     </script>

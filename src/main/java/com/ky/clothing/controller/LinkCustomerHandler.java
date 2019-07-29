@@ -33,14 +33,20 @@ public class LinkCustomerHandler {
     @RequestMapping(value = "/clothes/{pageNow}/{pageSize}", method = RequestMethod.GET)
     public String toClothes(@PathVariable("pageNow") Integer pageNow, @PathVariable("pageSize") Integer pageSize, HttpServletRequest request) {
     	if(IntegerUtil.isValid(pageNow)&&IntegerUtil.isValid(pageSize))
-    	{
-    		List<Goods> goodlist1 = goodsService.selectGoodsLimit(pageNow, pageSize);
-    		HttpSession session = request.getSession();
-    		session.setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(),goodlist1);   	
-    		int count = goodsService.selectGoodsCount();
-    		session.setAttribute(SysParamEnum.SESSION_GOODS_COUNT.toString(),count);
-    	}
+        {
+            int count = goodsService.selectGoodsCount();
+            int pages = (count % pageSize.intValue() == 0 ? count / pageSize.intValue() : count / pageSize.intValue() + 1);
+            if(pageNow.intValue()>pages)
+            {
+                pageNow=new Integer(1);
+            }
+            List<Goods> goodlist1 = goodsService.selectGoodsLimit(pageNow, pageSize);
+            HttpSession session = request.getSession();
+            session.setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(),goodlist1);
+            session.setAttribute(SysParamEnum.SESSION_GOODS_COUNT.toString(),count);
+        }
         return "/pages/clothes";
+
     }
 
     /**

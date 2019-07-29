@@ -12,6 +12,12 @@ import java.util.Map;
 public interface CartService {
 
     /**
+     * 根据cartId修改cartGoodsNum的值
+     * @param cart 待修改的cart对象
+     */
+    void updateCartGoodsNumByCartId(Cart cart);
+
+    /**
      * 根据用户id清空用户购物车中的所有商品
      * @param userId 用户id
      */

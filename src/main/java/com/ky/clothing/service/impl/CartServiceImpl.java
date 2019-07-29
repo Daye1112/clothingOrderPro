@@ -22,6 +22,12 @@ public class CartServiceImpl implements CartService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    public void updateCartGoodsNumByCartId(Cart cart) {
+        cartMapper.updateCartGoodsNumByCartId(cart);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public void deleteByUserId(Integer userId) {
         cartMapper.deleteByUserId(userId);
     }

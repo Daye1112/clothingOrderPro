@@ -30,6 +30,27 @@ public class CartHandler {
 
     private CartService cartService;
 
+    @RequestMapping(value = "/update/num", method = RequestMethod.POST)
+    public ModelAndView updateCart(Cart cart, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        //1. 判断cartGoodsNum，cartId是否为空
+        if(IntegerUtil.isNotValid(cart.getCartId()) || IntegerUtil.isNotValid(cart.getCartGoodsNum())){
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请输入商品数量");
+        }else{
+            cartService.updateCartGoodsNumByCartId(cart);
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "修改成功");
+        }
+        //2. 更新数据
+        modelAndView.setViewName("redirect:/cart/info.html");
+        return modelAndView;
+    }
+
+    /**
+     * 清空购物车
+     *
+     * @param request 请求域
+     * @return 返回modelAndView
+     */
     @RequestMapping(value = "/clear", method = RequestMethod.GET)
     public ModelAndView clearCart(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
