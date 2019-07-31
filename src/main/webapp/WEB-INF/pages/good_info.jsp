@@ -134,8 +134,13 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="button cart_button"><a id="cartBtn" href="#">添加购物车</a></div>
+                                    <div class="button cart_button"><a id="cartBtn" href="#">添加购物车</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a id="cltBtn" href="#">添加收藏</a>
+                                    </div>
                                 </div>
+                                
+                                </div>
+                                
                                 <input type="hidden" name="goodsId" value="${sessionScope.goods.goodsId}"/>
                             </form>
                         </div>
@@ -209,7 +214,7 @@
                 </div>
             </div>
         </div>
-        <%request.getSession().removeAttribute("goods");%>
+        
         <!-- Newsletter -->
         <jsp:include page="module/news_letter.jsp"/>
         <!-- Footer -->
@@ -224,6 +229,7 @@
     <script src="<%=path%>/static/js/product_custom.js"></script>
     <script type="text/javascript" src="<%=path%>/static/plugins/layui/layui.js"></script>
     <script type="text/javascript">
+    	var value="";
         $(function () {
             var $fafa = $("#fafa");
             $("#fa1").click(function () {
@@ -263,7 +269,18 @@
             $("#cartForm").submit();
             return false;
         });
+        
+        $("#cltBtn").click(function () {
+        	
+            window.location.href="<%=path%>/clt/add.do?goodsId="+"${goods.goodsId }"+"&cltGoodsSize="+value;
+        });
+        
+        $('input[name="cartGoodsSize"]').click(function(){
+        	value= $('input[name="cartGoodsSize"]:checked').val();  
+        })
+        
     </script>
     <%request.getSession().removeAttribute("dealMsg");%>
+    <%request.getSession().removeAttribute("goods");%>
 </body>
 </html>

@@ -31,8 +31,12 @@ public enum SysParamEnum {
     SESSION_CART_LIST_NAME("cartList"),
     /** 存入Session中的用户的购物信息 */
     SESSION_SHOP_INFO_NAME("shopInfo"),
+    /** 存入session中的用户收藏单信息 */
+    SESSION_CLT_LIST_NAME("cltList"),
 	/** 存入Session中的商品总记录*/
-	SESSION_GOODS_COUNT("goodsCount");
+	SESSION_GOODS_COUNT("goodsCount"), 
+	/** 存入Session中的用户的收藏信息 */
+	SESSION_STAR_INFO_NAME("starInfo");
 
     private String paramName;
 

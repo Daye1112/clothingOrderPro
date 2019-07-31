@@ -1,6 +1,7 @@
 package com.ky.clothing.realm;
 
 import com.ky.clothing.dao.CartMapper;
+import com.ky.clothing.dao.CollectionMapper;
 import com.ky.clothing.dao.UserMapper;
 import com.ky.clothing.entity.User;
 import com.ky.clothing.enums.SysParamEnum;
@@ -31,10 +32,16 @@ public class UserRealm extends AuthorizingRealm {
     }
 
     private CartMapper cartMapper;
+    private CollectionMapper collectionMapper;
 
     @Autowired
     public void setCartMapper(CartMapper cartMapper) {
         this.cartMapper = cartMapper;
+    }
+    
+    @Autowired
+    public void setCltMapper(CollectionMapper collectionMapper) {
+        this.collectionMapper = collectionMapper;
     }
 
     /**
@@ -67,12 +74,16 @@ public class UserRealm extends AuthorizingRealm {
         }
         //获取用户购物车的商品数量
         int cartCnt = cartMapper.findCountUserId(user.getUserId());
+        int cltCnt = collectionMapper.findCountUserId(user.getUserId());
         Map<String, Object> map = new HashMap<>(16);
+        Map<String, Object> map1 = new HashMap<>(16);
         //将用户的购物车商品数量
         map.put("cartCnt", cartCnt);
+        map1.put("cltCnt",cltCnt);
         // 当前用户信息存到session中
         SecurityUtils.getSubject().getSession().setAttribute(SysParamEnum.SESSION_USER_NAME.toString(), user);
         SecurityUtils.getSubject().getSession().setAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString(), map);
+        SecurityUtils.getSubject().getSession().setAttribute(SysParamEnum.SESSION_STAR_INFO_NAME.toString(), map1);
         //返回认证信息
         return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
     }

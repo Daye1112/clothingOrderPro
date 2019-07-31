@@ -42,6 +42,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Map<String, Object>> findBaseInfoByUserId(Integer userId) {
         List<Map<String, Object>> cartList = cartMapper.findBaseInfoByUserId(userId);
+        System.out.println(cartList);
         return CartUtil.calculationTotalPrice(cartList);
     }
 

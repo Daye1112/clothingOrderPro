@@ -35,12 +35,12 @@
                     </div>
                 </a>
                 <!-- Star -->
-                <a href="">
+                <a href="<%=path%>/clt/info.html">
                     <div class="star">
                         <img src="<%=path%>/static/images/star.svg" alt="">
                         <div class="star_num_container">
                             <div class="star_num_inner">
-                                <div class="star_num">0</div>
+                                <div class="star_num">${sessionScope.starInfo.cltCnt}</div>
                             </div>
                         </div>
                     </div>

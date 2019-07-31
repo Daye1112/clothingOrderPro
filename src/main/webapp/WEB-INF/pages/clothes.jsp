@@ -228,9 +228,11 @@
                                                     <img src="<%=path%>/static/images/shopping-bag-white.svg" alt="">
                                                 </div>
                                             </a>
+                                            <a href="<%=path%>/goods/info/${goods.goodsId}.html">
                                             <div class="product_fav product_option">
                                                 <img width="60%" src="<%=path%>/static/images/star.svg" alt="">
                                             </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
