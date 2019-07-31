@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ky.clothing.dao.CollectionMapper">
+    <resultMap id="BaseResultMap" type="com.ky.clothing.entity.Collectionss">
+        <id column="clt_id" jdbcType="INTEGER" property="cltId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="clt_goods_size" jdbcType="VARCHAR" property="cltGoodsSize"/>
+        <result column="clt_valid" jdbcType="BOOLEAN" property="cltValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+            clt_id,
+            user_id,
+            goods_id,
+            clt_goods_size,
+            clt_valid
+    </sql>
+
+    <insert id="insert" keyColumn="clt_id" keyProperty="cltId" parameterType="com.ky.clothing.entity.Collectionss"
+            useGeneratedKeys="true">
+        insert into collection (user_id, goods_id, clt_goods_size, clt_valid)
+        values (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{cltGoodsSize}, #{cltValid,jdbcType=BOOLEAN})
+    </insert>
+    
+    <!--根据商品id、用户id、商品size查询记录-->
+    <select id="findrecords" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from collection
+        where clt_valid = 1
+        and goods_id = #{goodsId,jdbcType=INTEGER}
+        and user_id = #{userId,jdbcType=INTEGER}
+        and clt_goods_size = #{cltGoodsSize,jdbcType=VARCHAR}
+    </select>
+    
+    <!--根据用户id查询用户的收藏单信息-->
+    <select id="findBaseInfoByUserId" resultType="java.util.Map" parameterType="integer">
+        select c.clt_id          cltId,
+               g.goods_id        goodsId,
+               g.goods_image_url goodsImageUrl,
+               g.goods_name      goodsName,
+               c.clt_goods_size  cltGoodsSize,
+               g.goods_price     goodsPrice
+        from collection c
+                 left join `user` u on u.user_id = c.user_id
+                 left join goods g on g.goods_id = c.goods_id
+        where c.clt_valid = 1
+          and u.user_valid = 1
+          and g.goods_valid = 1
+          and u.user_id = #{userId}
+    </select>
+    
+    <!--根据userId查询用户的收藏商品数量-->
+    <select id="findCountUserId" resultType="int" parameterType="integer">
+        select count(user_id)
+        from collection
+        where clt_valid = 1
+          and user_id = #{userId}
+    </select>
+    <!--根据cltId删除收藏信息-->
+    <update id="deleteByCltId" parameterType="integer">
+        update collection
+        set clt_valid = 0
+        where clt_id = #{cltId,jdbcType=INTEGER}
+    </update>
+    <!--根据用户id清空用户收藏单中的所有商品-->
+    <update id="deleteByUserId">
+        update collection
+        set clt_valid = 0
+        where user_id = #{userId}
+    </update>
+    
+</mapper>

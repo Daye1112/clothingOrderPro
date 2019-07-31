@@ -202,9 +202,11 @@
                                         <div class="product_price">￥${goods.goodsPrice}</div>
                                     </div>
                                     <div class="product_options">
-                                        <a href="<%=path%>/goods/info/${goods.goodsId}.html"><div class="product_buy product_option"><img
-                                                src="<%=path%>/static/images/shopping-bag-white.svg" alt=""></div></a>
-                                        <div class="product_fav product_option"><img width="60%" src="<%=path%>/static/images/star.svg" alt=""></div>
+                                        <a href="<%=path%>/goods/info/${goods.goodsId}.html"><div class="product_buy product_option">
+                                        <img src="<%=path%>/static/images/shopping-bag-white.svg" alt=""></div></a>
+                                                
+                                        <a href="<%=path%>/goods/info/${goods.goodsId}.html"><div class="product_fav product_option">
+                                        <img width="60%" src="<%=path%>/static/images/star.svg" alt=""></div></a>
                                     </div>
                                 </div>
                             </div>

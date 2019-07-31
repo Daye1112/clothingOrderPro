@@ -91,6 +91,7 @@ public class CartHandler {
         ModelAndView modelAndView = new ModelAndView();
         //查询用户的购物车信息
         List<Map<String, Object>> cartList = cartService.findBaseInfoByUserId(((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId());
+        //System.out.println(cartList);
         //存入session
         request.getSession().setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
         modelAndView.setViewName("pages/cart");
