@@ -5,6 +5,10 @@ package com.ky.clothing.enums;
  * 系统参数枚举
  */
 public enum SysParamEnum {
+    /** 存入request中的订单list */
+    REQUEST_ORDER_LIST_NAME("orderList"),
+    /** 用户list */
+    REQUEST_USER_LIST("userList"),
     /** 存入Session中的日志name */
     SESSION_SYS_LOG_NAME("sysLog"),
     /** 错误信息统一key名 */
@@ -36,7 +40,13 @@ public enum SysParamEnum {
 	/** 存入Session中的商品总记录*/
 	SESSION_GOODS_COUNT("goodsCount"), 
 	/** 存入Session中的用户的收藏信息 */
-	SESSION_STAR_INFO_NAME("starInfo");
+	SESSION_STAR_INFO_NAME("starInfo"),
+    /** 存入request中的浏览量前4的商品信息list */
+    REQUEST_GOODS_LIST_VISIT_TOP_FOUR_NAME("goodsTopFourList"),
+    /** 字符过滤器参数名 */
+    CHARACTER_FILTER_PARAMS_NAME("characterParams"),
+    /** 登录类型 */
+    SESSION_LOGIN_TYPE("loginType");
 
     private String paramName;
 

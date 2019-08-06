@@ -4,6 +4,7 @@ import com.ky.clothing.entity.Goods;
 import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.GoodsAssessService;
 import com.ky.clothing.service.GoodsService;
+import com.ky.clothing.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,36 @@ public class GoodsHandler {
     private GoodsAssessService goodsAssessService;
 
     /**
+     * 模糊查询商品信息
+     * @param goodsName 商品名
+     * @param request 请求域
+     * @return 跳转目标页
+     */
+    @RequestMapping(value = "/fq/goods", method = RequestMethod.POST)
+    public String toClothesFuzzyQuery(String goodsName, HttpServletRequest request) {
+        //判断参数是否为空
+        if(StringUtil.isEmpty(goodsName)){
+            request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请输入待搜索的商品名");
+        }else{
+            Goods goods = goodsService.selectFuzzyByGoodsName(goodsName);
+            if(goods == null){
+                return "redirect:/customerLink/home.html";
+            }
+            request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_NAME.toString(), goods);
+        }
+        return "redirect:/goods/jump.html";
+    }
+
+    /**
+     * 跳转到商品信息页
+     * @return 跳转到目标页面
+     */
+    @RequestMapping(value = "/jump", method = RequestMethod.GET)
+    public String toGoodsPages(){
+        return "/pages/good_info";
+    }
+
+    /**
      * 根据商品id查询商品信息存入session中准备使用
      *
      * @param goodsId 商品信息
@@ -47,6 +78,8 @@ public class GoodsHandler {
         request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_NAME.toString(), goods);
         //查询商品评论信息
         List<Map<String, Object>> assessList = goodsAssessService.selectBaseInfoByGoodsId(goodsId);
+        //商品浏览数+1
+        goodsService.updateVisitNumIncByGoodsId(goodsId);
         //存入session中
         request.getSession().setAttribute(SysParamEnum.SESSION_GOODS_ASSESSES_NAME.toString(), assessList);
         //设置跳转目标

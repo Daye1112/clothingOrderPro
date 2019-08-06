@@ -9,98 +9,113 @@ import java.util.Date;
  */
 public class Order implements Serializable {
     /**
-	* ID
-	*/
+     * ID
+     */
     private Integer orderId;
 
     /**
-	* 用户ID-外键
-	*/
+     * 用户ID-外键
+     */
     private Integer userId;
 
     /**
-	* 订单号
-	*/
+     * 订单号
+     */
     private String orderNo;
 
     /**
-	* 商品总额
-	*/
+     * 商品总额
+     */
     private Double goodsMoney;
 
     /**
-	* 运费
-	*/
-    private Double deliverMoney;
-
-    /**
-	* 订单总金额
-	*/
+     * 订单总金额
+     */
     private Double totalMoney;
 
     /**
-	* 0-未支付 1-待发货 2-用户取消 3-配送中 4-用户确认收货
-	*/
+     * 0-未支付 1-待发货 2-用户取消 3-配送中 4-用户确认收货
+     */
     private Short orderStatus;
 
     /**
-	* 0-未支付 1-已支付
-	*/
-    private Short isPay;
+     * 运费
+     */
+    private Double deliverMoney;
 
     /**
-	* 0-不需要发票 1-需要发票
-	*/
-    private Short isInvoice;
+     * 0-未支付 1-已支付
+     */
+    private Short ispay;
 
     /**
-	* 0-订单未完结 1-订单已完结
-	*/
-    private Short isClosed;
+     * 0-不需要发票 1-需要发票
+     */
+    private Short isinvoice;
 
     /**
-	* 发票抬头
-	*/
+     * 0-订单未完结 1-订单已完结
+     */
+    private Short isclosed;
+
+    /**
+     * 收货地址
+     */
+    private String orderAddress;
+
+    /**
+     * 用户真实姓名
+     */
+    private String userRealName;
+
+    /**
+     * 收件人手机号码
+     */
+    private String userPhone;
+
+    /**
+     * 发票抬头
+     */
     private String invoiceClient;
 
     /**
-	* 发票税号
-	*/
+     * 发票税号
+     */
     private String taxNum;
 
     /**
-	* 订单备注
-	*/
+     * 订单备注
+     */
     private String orderRemark;
 
     /**
-	* 收货时间
-	*/
+     * 收货时间
+     */
     private Date receiveTime;
 
     /**
-	* 发货时间
-	*/
+     * 发货时间
+     */
     private Date deliveryTime;
 
     /**
-	* 下单时间
-	*/
+     * 下单时间
+     */
     private Date createTime;
 
     /**
-	* 快递号
-	*/
+     * 快递号
+     */
     private String expressNo;
 
     /**
-	* 快递公司
-	*/
+     * 快递公司
+     */
     private String expressName;
 
     /**
-	* 0-无效 1-有效
-	*/
+     * 0-无效 1-有效
+     */
     private Boolean orderValid;
 
     private static final long serialVersionUID = 1L;
@@ -137,14 +152,6 @@ public class Order implements Serializable {
         this.goodsMoney = goodsMoney;
     }
 
-    public Double getDeliverMoney() {
-        return deliverMoney;
-    }
-
-    public void setDeliverMoney(Double deliverMoney) {
-        this.deliverMoney = deliverMoney;
-    }
-
     public Double getTotalMoney() {
         return totalMoney;
     }
@@ -161,28 +168,60 @@ public class Order implements Serializable {
         this.orderStatus = orderStatus;
     }
 
-    public Short getIsPay() {
-        return isPay;
+    public Double getDeliverMoney() {
+        return deliverMoney;
     }
 
-    public void setIsPay(Short isPay) {
-        this.isPay = isPay;
+    public void setDeliverMoney(Double deliverMoney) {
+        this.deliverMoney = deliverMoney;
     }
 
-    public Short getIsInvoice() {
-        return isInvoice;
+    public Short getIspay() {
+        return ispay;
     }
 
-    public void setIsInvoice(Short isInvoice) {
-        this.isInvoice = isInvoice;
+    public void setIspay(Short ispay) {
+        this.ispay = ispay;
     }
 
-    public Short getIsClosed() {
-        return isClosed;
+    public Short getIsinvoice() {
+        return isinvoice;
     }
 
-    public void setIsClosed(Short isClosed) {
-        this.isClosed = isClosed;
+    public void setIsinvoice(Short isinvoice) {
+        this.isinvoice = isinvoice;
+    }
+
+    public Short getIsclosed() {
+        return isclosed;
+    }
+
+    public void setIsclosed(Short isclosed) {
+        this.isclosed = isclosed;
+    }
+
+    public String getOrderAddress() {
+        return orderAddress;
+    }
+
+    public void setOrderAddress(String orderAddress) {
+        this.orderAddress = orderAddress;
+    }
+
+    public String getUserRealName() {
+        return userRealName;
+    }
+
+    public void setUserRealName(String userRealName) {
+        this.userRealName = userRealName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
     public String getInvoiceClient() {
@@ -264,12 +303,15 @@ public class Order implements Serializable {
                 ", userId=" + userId +
                 ", orderNo='" + orderNo + '\'' +
                 ", goodsMoney=" + goodsMoney +
-                ", deliverMoney=" + deliverMoney +
                 ", totalMoney=" + totalMoney +
                 ", orderStatus=" + orderStatus +
-                ", isPay=" + isPay +
-                ", isInvoice=" + isInvoice +
-                ", isClosed=" + isClosed +
+                ", deliverMoney=" + deliverMoney +
+                ", ispay=" + ispay +
+                ", isinvoice=" + isinvoice +
+                ", isclosed=" + isclosed +
+                ", orderAddress='" + orderAddress + '\'' +
+                ", userRealName='" + userRealName + '\'' +
+                ", userPhone='" + userPhone + '\'' +
                 ", invoiceClient='" + invoiceClient + '\'' +
                 ", taxNum='" + taxNum + '\'' +
                 ", orderRemark='" + orderRemark + '\'' +

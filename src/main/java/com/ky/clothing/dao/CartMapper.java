@@ -1,6 +1,7 @@
 package com.ky.clothing.dao;
 
 import com.ky.clothing.entity.Cart;
+import com.ky.clothing.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,26 @@ import java.util.Map;
  */
 @Repository
 public interface CartMapper {
+
+    /**
+     * 根据用户id查询出所有有效且未购买的购物车商品数量信息
+     * @param userId 用户id
+     * @return 返回mapList,key = {cartId}
+     */
+    List<Map<String, Object>> selectGoodsIdAndCartGoodsNumByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 更新购物车商品的购买标志
+     * @param userId 用户id
+     */
+    void updateIsBuyByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 根据用户id查询用户的购物车信息，为订单做准备
+     * @param userId 用户id
+     * @return 返回ListMap
+     */
+    List<Map<String, Object>> findByUserIdForCheckOrder(@Param("userId") Integer userId);
 
     /**
      * 根据cartId修改cartGoodsNum的值
@@ -59,12 +80,6 @@ public interface CartMapper {
      */
     Cart findByGoodsIdAndUserInAndCartGoodsSize(Cart cart);
 
-    /**
-     * 根据id删除记录
-     * @param cartId 购物车id
-     * @return 影响的行数
-     */
-    int deleteByPrimaryKey(Integer cartId);
 
     /**
      * 插入数据记录（无null验证）

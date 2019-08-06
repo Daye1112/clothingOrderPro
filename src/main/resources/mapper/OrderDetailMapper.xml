@@ -1,87 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ky.clothing.dao.OrderDetailMapper">
-  <resultMap id="BaseResultMap" type="com.ky.clothing.entity.OrderDetail">
-    <id column="order_detail_id" jdbcType="INTEGER" property="orderDetailId" />
-    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
-    <result column="order_id" jdbcType="INTEGER" property="orderId" />
-    <result column="order_goods_num" jdbcType="INTEGER" property="orderGoodsNum" />
-    <result column="order_detail_valid" jdbcType="BOOLEAN" property="orderDetailValid" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    order_detail_id, goods_id, order_id, order_goods_num, order_detail_valid
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from order_detail
-    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order_detail
-    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="order_detail_id" keyProperty="orderDetailId" parameterType="com.ky.clothing.entity.OrderDetail" useGeneratedKeys="true">
-    insert into order_detail (goods_id, order_id, order_goods_num,
-      order_detail_valid)
-    values (#{goodsId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderGoodsNum,jdbcType=INTEGER}, 
-      #{orderDetailValid,jdbcType=BOOLEAN})
-  </insert>
-  <insert id="insertSelective" keyColumn="order_detail_id" keyProperty="orderDetailId" parameterType="com.ky.clothing.entity.OrderDetail" useGeneratedKeys="true">
-    insert into order_detail
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="goodsId != null">
-        goods_id,
-      </if>
-      <if test="orderId != null">
-        order_id,
-      </if>
-      <if test="orderGoodsNum != null">
-        order_goods_num,
-      </if>
-      <if test="orderDetailValid != null">
-        order_detail_valid,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="goodsId != null">
-        #{goodsId,jdbcType=INTEGER},
-      </if>
-      <if test="orderId != null">
-        #{orderId,jdbcType=INTEGER},
-      </if>
-      <if test="orderGoodsNum != null">
-        #{orderGoodsNum,jdbcType=INTEGER},
-      </if>
-      <if test="orderDetailValid != null">
-        #{orderDetailValid,jdbcType=BOOLEAN},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.OrderDetail">
-    update order_detail
-    <set>
-      <if test="goodsId != null">
-        goods_id = #{goodsId,jdbcType=INTEGER},
-      </if>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=INTEGER},
-      </if>
-      <if test="orderGoodsNum != null">
-        order_goods_num = #{orderGoodsNum,jdbcType=INTEGER},
-      </if>
-      <if test="orderDetailValid != null">
-        order_detail_valid = #{orderDetailValid,jdbcType=BOOLEAN},
-      </if>
-    </set>
-    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.OrderDetail">
-    update order_detail
-    set goods_id = #{goodsId,jdbcType=INTEGER},
-      order_id = #{orderId,jdbcType=INTEGER},
-      order_goods_num = #{orderGoodsNum,jdbcType=INTEGER},
-      order_detail_valid = #{orderDetailValid,jdbcType=BOOLEAN}
-    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
-  </update>
+    <resultMap id="BaseResultMap" type="com.ky.clothing.entity.OrderDetail">
+        <id column="order_detail_id" jdbcType="INTEGER" property="orderDetailId"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="order_id" jdbcType="INTEGER" property="orderId"/>
+        <result column="order_goods_num" jdbcType="INTEGER" property="orderGoodsNum"/>
+        <result column="order_goods_size" jdbcType="VARCHAR" property="orderGoodsSize"/>
+        <result column="order_detail_valid" jdbcType="BOOLEAN" property="orderDetailValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+            order_detail_id,
+            goods_id,
+            order_id,
+            order_goods_num,
+            order_goods_size,
+            order_detail_valid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_detail
+        where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+    </select>
+    <!--根据orderId查询订单详情表-->
+    <select id="selectOrderDetailByOrderId" resultType="java.util.Map" parameterType="integer">
+        select g.goods_name                       goodsName,
+               od.order_goods_size                goodsSize,
+               od.order_goods_num                 goodsNum,
+               od.order_goods_num * g.goods_price totalPrice
+        from order_detail od
+                 left join `order` o on od.order_id = o.order_id
+                 left join goods g on od.goods_id = g.goods_id
+        where od.order_detail_valid = 1
+          and o.order_valid = 1
+          and g.goods_valid = 1
+          and od.order_id = #{orderId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from order_detail
+        where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="order_detail_id" keyProperty="orderDetailId"
+            parameterType="com.ky.clothing.entity.OrderDetail" useGeneratedKeys="true">
+        insert into order_detail (goods_id, order_id, order_goods_num, order_goods_size,
+                                  order_detail_valid)
+        values (#{goodsId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderGoodsNum,jdbcType=INTEGER},
+                #{orderGoodsSize,jdbcType=VARCHAR},
+                #{orderDetailValid,jdbcType=BOOLEAN})
+    </insert>
+    <insert id="insertSelective" keyColumn="order_detail_id" keyProperty="orderDetailId"
+            parameterType="com.ky.clothing.entity.OrderDetail" useGeneratedKeys="true">
+        insert into order_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="orderGoodsNum != null">
+                order_goods_num,
+            </if>
+            <if test="orderGoodsSize != null">
+                order_goods_size,
+            </if>
+            <if test="orderDetailValid != null">
+                order_detail_valid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="orderGoodsNum != null">
+                #{orderGoodsNum,jdbcType=INTEGER},
+            </if>
+            <if test="orderGoodsSize != null">
+                #{orderGoodsSize,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDetailValid != null">
+                #{orderDetailValid,jdbcType=BOOLEAN},
+            </if>
+        </trim>
+    </insert>
+    <!--插入订单细节对象list-->
+    <insert id="insertList" parameterType="list">
+        insert into order_detail (goods_id, order_id, order_goods_num, order_goods_size)
+        values
+        <foreach collection="orderDetailList" item="orderDetail" separator="," index="index">
+            (
+            #{orderDetail.goodsId},
+            #{orderDetail.orderId},
+            #{orderDetail.orderGoodsNum},
+            #{orderDetail.orderGoodsSize}
+            )
+        </foreach>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.OrderDetail">
+        update order_detail
+        <set>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="orderGoodsNum != null">
+                order_goods_num = #{orderGoodsNum,jdbcType=INTEGER},
+            </if>
+            <if test="orderGoodsSize != null">
+                order_goods_size = #{orderGoodsSize,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDetailValid != null">
+                order_detail_valid = #{orderDetailValid,jdbcType=BOOLEAN},
+            </if>
+        </set>
+        where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.OrderDetail">
+        update order_detail
+        set goods_id           = #{goodsId,jdbcType=INTEGER},
+            order_id           = #{orderId,jdbcType=INTEGER},
+            order_goods_num    = #{orderGoodsNum,jdbcType=INTEGER},
+            order_goods_size   = #{orderGoodsSize,jdbcType=VARCHAR},
+            order_detail_valid = #{orderDetailValid,jdbcType=BOOLEAN}
+        where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+    </update>
+    <!--根据订单id假删除所有对应的订单细节记录-->
+    <update id="deleteByOrderId" parameterType="integer">
+        update order_detail
+        set order_detail_valid = 0
+        where order_detail_valid = 1
+          and order_id = #{orderId}
+    </update>
 </mapper>

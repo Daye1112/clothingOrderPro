@@ -23,13 +23,10 @@
         select
         <include refid="Base_Column_List"/>
         from cart
-        where cart_id = #{cartId,jdbcType=INTEGER}
+        where cart_valid = 1
+        and isBuy = 0
+        and cart_id = #{cartId,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete
-        from cart
-        where cart_id = #{cartId,jdbcType=INTEGER}
-    </delete>
     <insert id="insert" keyColumn="cart_id" keyProperty="cartId" parameterType="com.ky.clothing.entity.Cart"
             useGeneratedKeys="true">
         insert into cart (user_id, goods_id, isBuy,
@@ -103,7 +100,9 @@
                 cart_valid = #{cartValid,jdbcType=BOOLEAN},
             </if>
         </set>
-        where cart_id = #{cartId,jdbcType=INTEGER}
+        where cart_valid = 1
+        and isBuy = 0
+        and cart_id = #{cartId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.Cart">
         update cart
@@ -113,7 +112,9 @@
             cart_goods_num  = #{cartGoodsNum,jdbcType=INTEGER},
             cart_goods_size = #{cartGoodsSize,jdbcType=VARCHAR},
             cart_valid      = #{cartValid,jdbcType=BOOLEAN}
-        where cart_id = #{cartId,jdbcType=INTEGER}
+        where cart_valid = 1
+          and isBuy = 0
+          and cart_id = #{cartId,jdbcType=INTEGER}
     </update>
     <!--根据商品id、用户id、商品size查询记录-->
     <select id="findByGoodsIdAndUserInAndCartGoodsSize" resultMap="BaseResultMap">
@@ -121,6 +122,7 @@
         <include refid="Base_Column_List"/>
         from cart
         where cart_valid = 1
+        AND isBuy = 0
         and goods_id = #{goodsId,jdbcType=INTEGER}
         and user_id = #{userId,jdbcType=INTEGER}
         and cart_goods_size = #{cartGoodsSize,jdbcType=VARCHAR}
@@ -133,13 +135,15 @@
                g.goods_name      goodsName,
                c.cart_goods_size cartGoodsSize,
                g.goods_price     goodsPrice,
-               c.cart_goods_num  cartGoodsNum
+               c.cart_goods_num  cartGoodsNum,
+               g.goods_stock     goodsStock
         FROM cart c
                  LEFT JOIN `user` u ON u.user_id = c.user_id
                  LEFT JOIN goods g ON g.goods_id = c.goods_id
         WHERE c.cart_valid = 1
           AND u.user_valid = 1
           AND g.goods_valid = 1
+          AND c.isBuy = 0
           AND u.user_id = #{userId}
     </select>
     <!--将cart的商品num自增-->
@@ -147,6 +151,7 @@
         update cart
         set cart_goods_num = cart_goods_num + 1
         where cart_valid = 1
+          AND isBuy = 0
           and cart_id = #{cartId,jdbcType=INTEGER}
     </update>
     <!--根据userId查询用户的购物车数量-->
@@ -154,25 +159,62 @@
         select count(user_id)
         from cart
         where cart_valid = 1
+          AND isBuy = 0
           and user_id = #{userId}
+    </select>
+    <!--根据用户id查询用户的购物车信息，为订单做准备-->
+    <select id="findByUserIdForCheckOrder" resultType="java.util.Map" parameterType="integer">
+        SELECT g.goods_name                     goodsName,
+               c.cart_goods_size                cartGoodsSize,
+               c.cart_goods_num                 cartGoodsNum,
+               g.goods_price * c.cart_goods_num totalPrice
+        FROM cart c
+                 LEFT JOIN `user` u ON u.user_id = c.user_id
+                 LEFT JOIN goods g ON g.goods_id = c.goods_id
+        WHERE c.cart_valid = 1
+          AND u.user_valid = 1
+          AND g.goods_valid = 1
+          AND c.isBuy = 0
+          AND u.user_id = #{userId}
+    </select>
+    <!--根据用户id查询出所有有效且未购买的购物车商品数量信息-->
+    <select id="selectGoodsIdAndCartGoodsNumByUserId" resultType="java.util.Map">
+        SELECT cart_id cartId
+        FROM cart
+        WHERE cart_valid = 1
+          AND isBuy = 0
+          AND user_id = #{userId}
     </select>
     <!--根据cartId删除购物车信息-->
     <update id="deleteByCartId" parameterType="integer">
         update cart
         set cart_valid = 0
-        where cart_id = #{cartId,jdbcType=INTEGER}
+        where isBuy = 0
+          AND cart_valid = 1
+          AND cart_id = #{cartId,jdbcType=INTEGER}
     </update>
     <!--根据用户id清空用户购物车中的所有商品-->
     <update id="deleteByUserId">
         update cart
         set cart_valid = 0
-        where user_id = #{userId}
+        where isBuy = 0
+          AND cart_valid = 1
+          AND user_id = #{userId}
     </update>
     <!--根据cartId修改cartGoodsNum的值-->
     <update id="updateCartGoodsNumByCartId" parameterType="cart">
         update cart
         set cart_goods_num = #{cartGoodsNum}
         where cart_valid = 1
+          AND isBuy = 0
           and cart_id = #{cartId}
+    </update>
+    <!--更新购物车商品的购买标志-->
+    <update id="updateIsBuyByUserId" parameterType="integer">
+        update cart
+        set isBuy = 1
+        where cart_valid = 1
+          AND isBuy = 0
+          and user_id = #{userId,jdbcType=INTEGER}
     </update>
 </mapper>

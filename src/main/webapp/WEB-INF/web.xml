@@ -119,6 +119,22 @@
         <location>/WEB-INF/pages/404.jsp</location>
     </error-page>
 
+    <!-- 跨域脚本攻击防御 -->
+    <!-- 非法字符过滤器 -->
+    <filter>
+        <filter-name>IllegalCharacter</filter-name>
+        <filter-class>com.ky.clothing.filter.IllegalCharacterFilter</filter-class>
+        <init-param>
+            <param-name>characterParams</param-name>
+            <!-- 此处加入要过滤的字符或字符串，以逗号隔开 -->
+            <param-value>&lt;,&gt;,*,@,IMG,SRC,$,@,&apos;,|,>,+,CR,LF</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>IllegalCharacter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!-- shiro过虑器，DelegatingFilterProx会从spring容器中找shiroFilter -->
     <filter>
         <!-- filter-name必须跟spring配置文件中真实的ShiroFilterBean一致 -->

@@ -12,6 +12,13 @@ import java.util.Map;
 public interface GoodsAssessService {
 
     /**
+     * 根据goodsId查询商品的评价人数和总分数
+     * @param goodsId 商品id
+     * @return 返回map
+     */
+    Map<String, Object> selectSumScoreAndCntByGoodsId(Integer goodsId);
+
+    /**
      * 插入商品评论记录
      * @param goodsAssess 待插入的商品评论记录
      */

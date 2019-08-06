@@ -6,12 +6,15 @@
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
         <result column="goods_money" jdbcType="DOUBLE" property="goodsMoney"/>
-        <result column="deliver_money" jdbcType="DOUBLE" property="deliverMoney"/>
         <result column="total_money" jdbcType="DOUBLE" property="totalMoney"/>
         <result column="order_status" jdbcType="SMALLINT" property="orderStatus"/>
-        <result column="isPay" jdbcType="SMALLINT" property="isPay"/>
-        <result column="isInvoice" jdbcType="SMALLINT" property="isInvoice"/>
-        <result column="isClosed" jdbcType="SMALLINT" property="isClosed"/>
+        <result column="deliver_money" jdbcType="DOUBLE" property="deliverMoney"/>
+        <result column="isPay" jdbcType="SMALLINT" property="ispay"/>
+        <result column="isInvoice" jdbcType="SMALLINT" property="isinvoice"/>
+        <result column="isClosed" jdbcType="SMALLINT" property="isclosed"/>
+        <result column="order_address" jdbcType="VARCHAR" property="orderAddress"/>
+        <result column="user_real_name" jdbcType="VARCHAR" property="userRealName"/>
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone"/>
         <result column="invoice_client" jdbcType="VARCHAR" property="invoiceClient"/>
         <result column="tax_num" jdbcType="VARCHAR" property="taxNum"/>
         <result column="order_remark" jdbcType="VARCHAR" property="orderRemark"/>
@@ -27,12 +30,15 @@
             user_id,
             order_no,
             goods_money,
-            deliver_money,
             total_money,
             order_status,
+            deliver_money,
             isPay,
             isInvoice,
             isClosed,
+            order_address,
+            user_real_name,
+            user_phone,
             invoice_client,
             tax_num,
             order_remark,
@@ -46,32 +52,45 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from order
+        from `order`
         where order_id = #{orderId,jdbcType=INTEGER}
+    </select>
+    <!--根据userId查询用户的所有订单详情-->
+    <select id="selectBaseInfoByUserId" resultType="java.util.Map" parameterType="integer">
+        select order_id     orderId,
+               order_no     orderNo,
+               order_status orderStatus,
+               total_money  totalMoney,
+               isInvoice    isInvoice
+        from `order`
+        where order_valid = 1
+          and user_id = #{userId}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
-        from order
+        from `order`
         where order_id = #{orderId,jdbcType=INTEGER}
     </delete>
     <insert id="insert" keyColumn="order_id" keyProperty="orderId" parameterType="com.ky.clothing.entity.Order"
             useGeneratedKeys="true">
-        insert into order (user_id, order_no, goods_money,
-                           deliver_money, total_money, order_status,
-                           isPay, isInvoice, isClosed,
-                           invoice_client, tax_num, order_remark,
-                           receive_time, delivery_time, create_time,
-                           express_no, express_name, order_valid)
+        insert into `order` (user_id, order_no, goods_money,
+                             total_money, order_status, deliver_money,
+                             isPay, isInvoice, isClosed,
+                             order_address, user_real_name, user_phone,
+                             invoice_client, tax_num, order_remark,
+                             receive_time, delivery_time, create_time,
+                             express_no, express_name, order_valid)
         values (#{userId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{goodsMoney,jdbcType=DOUBLE},
-                #{deliverMoney,jdbcType=DOUBLE}, #{totalMoney,jdbcType=DOUBLE}, #{orderStatus,jdbcType=SMALLINT},
-                #{isPay,jdbcType=SMALLINT}, #{isInvoice,jdbcType=SMALLINT}, #{isClosed,jdbcType=SMALLINT},
+                #{totalMoney,jdbcType=DOUBLE}, #{orderStatus,jdbcType=SMALLINT}, #{deliverMoney,jdbcType=DOUBLE},
+                #{ispay,jdbcType=SMALLINT}, #{isinvoice,jdbcType=SMALLINT}, #{isclosed,jdbcType=SMALLINT},
+                #{orderAddress,jdbcType=VARCHAR}, #{userRealName,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR},
                 #{invoiceClient,jdbcType=VARCHAR}, #{taxNum,jdbcType=VARCHAR}, #{orderRemark,jdbcType=VARCHAR},
                 #{receiveTime,jdbcType=TIMESTAMP}, #{deliveryTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
                 #{expressNo,jdbcType=VARCHAR}, #{expressName,jdbcType=VARCHAR}, #{orderValid,jdbcType=BOOLEAN})
     </insert>
     <insert id="insertSelective" keyColumn="order_id" keyProperty="orderId" parameterType="com.ky.clothing.entity.Order"
             useGeneratedKeys="true">
-        insert into order
+        insert into `order`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">
                 user_id,
@@ -82,23 +101,32 @@
             <if test="goodsMoney != null">
                 goods_money,
             </if>
-            <if test="deliverMoney != null">
-                deliver_money,
-            </if>
             <if test="totalMoney != null">
                 total_money,
             </if>
             <if test="orderStatus != null">
                 order_status,
             </if>
-            <if test="isPay != null">
+            <if test="deliverMoney != null">
+                deliver_money,
+            </if>
+            <if test="ispay != null">
                 isPay,
             </if>
-            <if test="isInvoice != null">
+            <if test="isinvoice != null">
                 isInvoice,
             </if>
-            <if test="isClosed != null">
+            <if test="isclosed != null">
                 isClosed,
+            </if>
+            <if test="orderAddress != null">
+                order_address,
+            </if>
+            <if test="userRealName != null">
+                user_real_name,
+            </if>
+            <if test="userPhone != null">
+                user_phone,
             </if>
             <if test="invoiceClient != null">
                 invoice_client,
@@ -138,23 +166,32 @@
             <if test="goodsMoney != null">
                 #{goodsMoney,jdbcType=DOUBLE},
             </if>
-            <if test="deliverMoney != null">
-                #{deliverMoney,jdbcType=DOUBLE},
-            </if>
             <if test="totalMoney != null">
                 #{totalMoney,jdbcType=DOUBLE},
             </if>
             <if test="orderStatus != null">
                 #{orderStatus,jdbcType=SMALLINT},
             </if>
-            <if test="isPay != null">
-                #{isPay,jdbcType=SMALLINT},
+            <if test="deliverMoney != null">
+                #{deliverMoney,jdbcType=DOUBLE},
             </if>
-            <if test="isInvoice != null">
-                #{isInvoice,jdbcType=SMALLINT},
+            <if test="ispay != null">
+                #{ispay,jdbcType=SMALLINT},
             </if>
-            <if test="isClosed != null">
-                #{isClosed,jdbcType=SMALLINT},
+            <if test="isinvoice != null">
+                #{isinvoice,jdbcType=SMALLINT},
+            </if>
+            <if test="isclosed != null">
+                #{isclosed,jdbcType=SMALLINT},
+            </if>
+            <if test="orderAddress != null">
+                #{orderAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="userRealName != null">
+                #{userRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null">
+                #{userPhone,jdbcType=VARCHAR},
             </if>
             <if test="invoiceClient != null">
                 #{invoiceClient,jdbcType=VARCHAR},
@@ -186,7 +223,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.ky.clothing.entity.Order">
-        update order
+        update `order`
         <set>
             <if test="userId != null">
                 user_id = #{userId,jdbcType=INTEGER},
@@ -197,23 +234,32 @@
             <if test="goodsMoney != null">
                 goods_money = #{goodsMoney,jdbcType=DOUBLE},
             </if>
-            <if test="deliverMoney != null">
-                deliver_money = #{deliverMoney,jdbcType=DOUBLE},
-            </if>
             <if test="totalMoney != null">
                 total_money = #{totalMoney,jdbcType=DOUBLE},
             </if>
             <if test="orderStatus != null">
                 order_status = #{orderStatus,jdbcType=SMALLINT},
             </if>
-            <if test="isPay != null">
-                isPay = #{isPay,jdbcType=SMALLINT},
+            <if test="deliverMoney != null">
+                deliver_money = #{deliverMoney,jdbcType=DOUBLE},
             </if>
-            <if test="isInvoice != null">
-                isInvoice = #{isInvoice,jdbcType=SMALLINT},
+            <if test="ispay != null">
+                isPay = #{ispay,jdbcType=SMALLINT},
             </if>
-            <if test="isClosed != null">
-                isClosed = #{isClosed,jdbcType=SMALLINT},
+            <if test="isinvoice != null">
+                isInvoice = #{isinvoice,jdbcType=SMALLINT},
+            </if>
+            <if test="isclosed != null">
+                isClosed = #{isclosed,jdbcType=SMALLINT},
+            </if>
+            <if test="orderAddress != null">
+                order_address = #{orderAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="userRealName != null">
+                user_real_name = #{userRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null">
+                user_phone = #{userPhone,jdbcType=VARCHAR},
             </if>
             <if test="invoiceClient != null">
                 invoice_client = #{invoiceClient,jdbcType=VARCHAR},
@@ -246,16 +292,19 @@
         where order_id = #{orderId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.ky.clothing.entity.Order">
-        update order
+        update `order`
         set user_id        = #{userId,jdbcType=INTEGER},
             order_no       = #{orderNo,jdbcType=VARCHAR},
             goods_money    = #{goodsMoney,jdbcType=DOUBLE},
-            deliver_money  = #{deliverMoney,jdbcType=DOUBLE},
             total_money    = #{totalMoney,jdbcType=DOUBLE},
             order_status   = #{orderStatus,jdbcType=SMALLINT},
-            isPay          = #{isPay,jdbcType=SMALLINT},
-            isInvoice      = #{isInvoice,jdbcType=SMALLINT},
-            isClosed       = #{isClosed,jdbcType=SMALLINT},
+            deliver_money  = #{deliverMoney,jdbcType=DOUBLE},
+            isPay          = #{ispay,jdbcType=SMALLINT},
+            isInvoice      = #{isinvoice,jdbcType=SMALLINT},
+            isClosed       = #{isclosed,jdbcType=SMALLINT},
+            order_address  = #{orderAddress,jdbcType=VARCHAR},
+            user_real_name = #{userRealName,jdbcType=VARCHAR},
+            user_phone     = #{userPhone,jdbcType=VARCHAR},
             invoice_client = #{invoiceClient,jdbcType=VARCHAR},
             tax_num        = #{taxNum,jdbcType=VARCHAR},
             order_remark   = #{orderRemark,jdbcType=VARCHAR},
@@ -266,5 +315,25 @@
             express_name   = #{expressName,jdbcType=VARCHAR},
             order_valid    = #{orderValid,jdbcType=BOOLEAN}
         where order_id = #{orderId,jdbcType=INTEGER}
+    </update>
+    <!--根据orderId删除order记录-->
+    <update id="deleteByOrderId" parameterType="integer">
+        update `order`
+        set order_valid = 0
+        where order_valid = 1
+          and order_status != 4
+          and isClosed = 0
+          and order_id = #{orderId}
+    </update>
+    <!--根据订单号更新订单的支付信息-->
+    <update id="updateIsPayAndOrderStatusByOrderNo" parameterType="string">
+        update `order`
+        set order_status = 1,
+            isPay        = 1
+        where order_valid = 1
+          and order_status = 0
+          and isPay = 0
+          and isClosed = 0
+          and order_no = #{orderNo}
     </update>
 </mapper>

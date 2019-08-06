@@ -15,8 +15,8 @@
         <ul class="menu_mm">
             <li class="menu_mm"><a href="<%=path%>/customerLink/home.html">主页</a></li>
             <li class="menu_mm"><a href="<%=path%>/customerLink/clothes/1/12.html">服装</a></li>
-            <li class="menu_mm"><a href="">accessories</a></li>
-            <li class="menu_mm"><a href="">lingerie</a></li>
+            <%--<li class="menu_mm"><a href="">accessories</a></li>--%>
+            <li class="menu_mm"><a href="<%=path%>/userLink/order/list.html">我的订单</a></li>
             <li class="menu_mm"><a href="<%=path%>/customerLink/contact.html">联系我们</a></li>
         </ul>
     </nav>

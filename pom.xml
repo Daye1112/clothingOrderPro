@@ -313,6 +313,13 @@
       <version>1.4.7</version>
     </dependency>
 
+    <!--添加阿里支付宝依赖-->
+    <dependency>
+      <groupId>com.alipay</groupId>
+      <artifactId>sdk-java</artifactId>
+      <version>20170324180803</version>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

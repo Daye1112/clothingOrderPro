@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author Daye
@@ -18,6 +19,13 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    @Override
+    public List<User> selectAllUserBaseInfo() {
+        return userMapper.selectAllUserBaseInfo();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateAvatarUrlByUserId(User user) {
         return userMapper.updateAvatarUrlByUserId(user) > 0;

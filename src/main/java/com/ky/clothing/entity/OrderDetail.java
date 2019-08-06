@@ -28,6 +28,11 @@ public class OrderDetail implements Serializable {
     private Integer orderGoodsNum;
 
     /**
+     * 商品尺寸
+     */
+    private String orderGoodsSize;
+
+    /**
 	* 0-无效 1-有效
 	*/
     private Boolean orderDetailValid;
@@ -66,6 +71,14 @@ public class OrderDetail implements Serializable {
         this.orderGoodsNum = orderGoodsNum;
     }
 
+    public String getOrderGoodsSize() {
+        return orderGoodsSize;
+    }
+
+    public void setOrderGoodsSize(String orderGoodsSize) {
+        this.orderGoodsSize = orderGoodsSize;
+    }
+
     public Boolean getOrderDetailValid() {
         return orderDetailValid;
     }
@@ -81,6 +94,7 @@ public class OrderDetail implements Serializable {
                 ", goodsId=" + goodsId +
                 ", orderId=" + orderId +
                 ", orderGoodsNum=" + orderGoodsNum +
+                ", orderGoodsSize='" + orderGoodsSize + '\'' +
                 ", orderDetailValid=" + orderDetailValid +
                 '}';
     }

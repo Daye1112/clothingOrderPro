@@ -5,6 +5,9 @@ import java.util.Map;
 
 import com.ky.clothing.entity.Collectionss;
 
+/**
+ * @author cyan-bw
+ */
 public interface CollectionService {
 
     /**
@@ -35,7 +38,7 @@ public interface CollectionService {
     Collectionss checkCltIsNew(Collectionss clt);
     /**
      * 将商品加入到用户收藏单中
-     * @param Collectionss 收藏单对象
+     * @param clt 收藏单对象
      */
     void addCollectionss(Collectionss clt);
 }

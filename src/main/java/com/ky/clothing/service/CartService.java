@@ -12,6 +12,13 @@ import java.util.Map;
 public interface CartService {
 
     /**
+     * 根据用户id查询用户的购物车信息，为订单做准备
+     * @param userId 用户id
+     * @return 返回ListMap
+     */
+    List<Map<String, Object>> findByUserIdForCheckOrder(Integer userId);
+
+    /**
      * 根据cartId修改cartGoodsNum的值
      * @param cart 待修改的cart对象
      */

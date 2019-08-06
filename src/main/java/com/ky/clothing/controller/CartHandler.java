@@ -4,6 +4,7 @@ import com.ky.clothing.entity.Cart;
 import com.ky.clothing.entity.User;
 import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.CartService;
+import com.ky.clothing.service.GoodsService;
 import com.ky.clothing.util.IntegerUtil;
 import com.ky.clothing.util.StringUtil;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ public class CartHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(CartHandler.class);
 
     private CartService cartService;
+    private GoodsService goodsService;
 
     @RequestMapping(value = "/update/num", method = RequestMethod.POST)
     public ModelAndView updateCart(Cart cart, HttpServletRequest request) {
@@ -56,6 +58,10 @@ public class CartHandler {
         ModelAndView modelAndView = new ModelAndView();
         User user = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
         cartService.deleteByUserId(user.getUserId());
+        LOGGER.debug("用户:" + user.getLoginAccount() + "清空购物车");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> shopInfo = (Map<String, Object>) request.getSession().getAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString());
+        shopInfo.put("cartCnt", 0);
         request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已清空购物车");
         modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
@@ -74,6 +80,9 @@ public class CartHandler {
             request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "请选择要删除的商品");
         } else {
             cartService.deleteByCartId(cartId);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> shopInfo = (Map<String, Object>) request.getSession().getAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString());
+            shopInfo.put("cartCnt", (int)shopInfo.get("cartCnt") - 1);
             request.getSession().setAttribute(SysParamEnum.SESSION_REQUEST_MESSAGE_NAME.toString(), "已删除该商品");
         }
         modelAndView.setViewName("redirect:/cart/info.html");
@@ -91,9 +100,8 @@ public class CartHandler {
         ModelAndView modelAndView = new ModelAndView();
         //查询用户的购物车信息
         List<Map<String, Object>> cartList = cartService.findBaseInfoByUserId(((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString())).getUserId());
-        //System.out.println(cartList);
         //存入session
-        request.getSession().setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
+        request.setAttribute(SysParamEnum.SESSION_CART_LIST_NAME.toString(), cartList);
         modelAndView.setViewName("pages/cart");
         return modelAndView;
     }
@@ -129,6 +137,7 @@ public class CartHandler {
                 //6. 如果有同商品，商品num++
                 cartService.updateCartGoodsNumInc(checkCartIsNew);
             } // if 4 end
+            goodsService.updateGoodsStockSelfByGoodsId(cart.getGoodsId());
         }// if 1 end
         modelAndView.setViewName("redirect:/cart/info.html");
         return modelAndView;
@@ -137,5 +146,10 @@ public class CartHandler {
     @Autowired
     public void setCartService(CartService cartService) {
         this.cartService = cartService;
+    }
+
+    @Autowired
+    public void setGoodsService(GoodsService goodsService) {
+        this.goodsService = goodsService;
     }
 }

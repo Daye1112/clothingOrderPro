@@ -19,6 +19,12 @@ public class GoodsAssessServiceImpl implements GoodsAssessService {
 
     private GoodsAssessMapper goodsAssessMapper;
 
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    @Override
+    public Map<String, Object> selectSumScoreAndCntByGoodsId(Integer goodsId) {
+        return goodsAssessMapper.selectSumScoreAndCntByGoodsId(goodsId);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void insertGoodsAssess(GoodsAssess goodsAssess) {

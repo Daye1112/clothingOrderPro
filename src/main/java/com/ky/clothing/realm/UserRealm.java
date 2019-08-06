@@ -13,6 +13,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -31,18 +32,6 @@ public class UserRealm extends AuthorizingRealm {
         return "UserRealm";
     }
 
-    private CartMapper cartMapper;
-    private CollectionMapper collectionMapper;
-
-    @Autowired
-    public void setCartMapper(CartMapper cartMapper) {
-        this.cartMapper = cartMapper;
-    }
-    
-    @Autowired
-    public void setCltMapper(CollectionMapper collectionMapper) {
-        this.collectionMapper = collectionMapper;
-    }
 
     /**
      * 授权
@@ -64,6 +53,8 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        //获取登录类型
+        Object loginType = SecurityUtils.getSubject().getSession().getAttribute(SysParamEnum.SESSION_LOGIN_TYPE.toString());
         //从token中获取登录的用户名
         String username = token.getPrincipal().toString();
         //查询数据库返回用户信息
@@ -72,18 +63,12 @@ public class UserRealm extends AuthorizingRealm {
         if(user == null){
             return null;
         }
-        //获取用户购物车的商品数量
-        int cartCnt = cartMapper.findCountUserId(user.getUserId());
-        int cltCnt = collectionMapper.findCountUserId(user.getUserId());
-        Map<String, Object> map = new HashMap<>(16);
-        Map<String, Object> map1 = new HashMap<>(16);
-        //将用户的购物车商品数量
-        map.put("cartCnt", cartCnt);
-        map1.put("cltCnt",cltCnt);
+        //判断用户是否有权限
+        if(loginType != null && !user.getManage()){
+            return null;
+        }
         // 当前用户信息存到session中
         SecurityUtils.getSubject().getSession().setAttribute(SysParamEnum.SESSION_USER_NAME.toString(), user);
-        SecurityUtils.getSubject().getSession().setAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString(), map);
-        SecurityUtils.getSubject().getSession().setAttribute(SysParamEnum.SESSION_STAR_INFO_NAME.toString(), map1);
         //返回认证信息
         return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
     }

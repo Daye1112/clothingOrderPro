@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Collection</title>
+    <title>我的收藏</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Wish shop project">
@@ -62,7 +62,6 @@
                                     <div class="cart_bar_title_price">尺寸</div>
                                     <div class="cart_bar_title_price">单价</div>
                                     <div class="cart_bar_title_button"></div>
-                                    <div class="cart_bar_title_button"></div>
                                 </div>
                             </div>
                         </div>
@@ -97,10 +96,6 @@
                                                         <img src="<%=path%>/static/images/trash.png" alt="">
                                                     </a>
                                                 </div>
-                                               <!-- 可新增功能 -->                                             
-                                                <div class="clt_product_button">
-
-                                                </div>
                                             </div>
                                         </div>
                                     </li>
@@ -124,84 +119,7 @@
 
 
         <!-- Newsletter -->
-
-        <div class="newsletter">
-            <div class="newsletter_content">
-                <div class="newsletter_image parallax-window" data-parallax="scroll"
-                     data-image-src="<%=path%>/static/images/newsletter.jpg"
-                     data-speed="0.8"></div>
-                <div class="container">
-                    <div class="row options">
-
-                        <!-- Options Item -->
-                        <div class="col-lg-3">
-                            <div class="options_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="option_image"><img src="<%=path%>/static/images/option_1.png" alt=""></div>
-                                <div class="option_content">
-                                    <div class="option_title">30天退换</div>
-                                    <div class="option_subtitle">无条件退货</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Options Item -->
-                        <div class="col-lg-3">
-                            <div class="options_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="option_image"><img src="<%=path%>/static/images/option_2.png" alt=""></div>
-                                <div class="option_content">
-                                    <div class="option_title">免费定制</div>
-                                    <div class="option_subtitle">定制不加价</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Options Item -->
-                        <div class="col-lg-3">
-                            <div class="options_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="option_image"><img src="<%=path%>/static/images/option_3.png" alt=""></div>
-                                <div class="option_content">
-                                    <div class="option_title">安全付款</div>
-                                    <div class="option_subtitle">无需担心</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Options Item -->
-                        <div class="col-lg-3">
-                            <div class="options_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="option_image"><img src="<%=path%>/static/images/option_4.png" alt=""></div>
-                                <div class="option_content">
-                                    <div class="option_title">全天候支持</div>
-                                    <div class="option_subtitle">随时联系我们</div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row newsletter_row">
-                        <div class="col">
-                            <div class="section_title_container text-center">
-                                <div class="section_subtitle">only the best</div>
-                                <div class="section_title">拓展模块</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row newsletter_container">
-                        <div class="col-lg-10 offset-lg-1">
-                            <div class="newsletter_form_container">
-                                <form action="#">
-                                    <input type="email" class="newsletter_input" required="required"
-                                           placeholder="E-mail here">
-                                    <button type="submit" class="newsletter_button">提交</button>
-                                </form>
-                            </div>
-                            <div class="newsletter_text">文案
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <jsp:include page="module/news_letter_2.jsp"/>
 
         <!-- Footer -->
         <jsp:include page="module/footer.jsp"/>

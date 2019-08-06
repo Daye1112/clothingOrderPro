@@ -1,5 +1,7 @@
 package com.ky.clothing.controller;
 
+import com.ky.clothing.dao.CartMapper;
+import com.ky.clothing.dao.CollectionMapper;
 import com.ky.clothing.entity.User;
 import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.SysLogService;
@@ -21,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Daye
@@ -33,6 +37,8 @@ public class UserHandler {
 
     private SysLogService sysLogService;
     private UserService userService;
+    private CartMapper cartMapper;
+    private CollectionMapper collectionMapper;
 
     /**
      * 用户修改头像
@@ -227,8 +233,13 @@ public class UserHandler {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView userLogin(User user, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
+        Object loginType = request.getParameter("loginType");
         //获取用户
         Subject subject = SecurityUtils.getSubject();
+        //登出上一个账号
+        subject.logout();
+        //设置登录类型
+        subject.getSession().setAttribute(SysParamEnum.SESSION_LOGIN_TYPE.toString(), loginType);
         //设置用户的账号密码
         UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginAccount(), user.getPassword());
         try {
@@ -246,13 +257,31 @@ public class UserHandler {
         }
         //判断用户是否登录成功
         if (subject.isAuthenticated()) {
+            User userSession = (User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString());
+            //获取用户购物车的商品数量
+            int cartCnt = cartMapper.findCountUserId(userSession.getUserId());
+            int cltCnt = collectionMapper.findCountUserId(userSession.getUserId());
+            Map<String, Object> map = new HashMap<>(16);
+            //将用户的购物车商品数量
+            map.put("cartCnt", cartCnt);
+            map.put("cltCnt", cltCnt);
+            request.getSession().setAttribute(SysParamEnum.SESSION_SHOP_INFO_NAME.toString(), map);
             //记录用户登录
             sysLogService.insertSelective(SysLogUtil.initUserSysLog((User) request.getSession().getAttribute(SysParamEnum.SESSION_USER_NAME.toString()), request, "登录", "user/login", "用户登录系统"));
-            //成功则跳转到主页
-            modelAndView.setViewName("redirect:/customerLink/home.html");
+            if(loginType != null){
+                modelAndView.setViewName("redirect:/lk/admin/home.html");
+            } else {
+                //成功则跳转到主页
+                modelAndView.setViewName("redirect:/customerLink/home.html");
+            }
         } else {
+            request.getSession().removeAttribute(SysParamEnum.SESSION_USER_NAME.toString());
             //失败跳转回登录页面
-            modelAndView.setViewName("/pages/login");
+            if(loginType != null){
+                modelAndView.setViewName("/pages/admin/login");
+            } else {
+                modelAndView.setViewName("/pages/login");
+            }
         }
         return modelAndView;
     }
@@ -265,5 +294,15 @@ public class UserHandler {
     @Autowired
     public void setSysLogService(SysLogService sysLogService) {
         this.sysLogService = sysLogService;
+    }
+
+    @Autowired
+    public void setCartMapper(CartMapper cartMapper) {
+        this.cartMapper = cartMapper;
+    }
+
+    @Autowired
+    public void setCltMapper(CollectionMapper collectionMapper) {
+        this.collectionMapper = collectionMapper;
     }
 }

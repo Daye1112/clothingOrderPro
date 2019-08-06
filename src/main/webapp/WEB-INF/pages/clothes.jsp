@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Categories</title>
+    <title>服装商场</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Wish shop project">
@@ -57,55 +57,24 @@
                         <div class="sidebar_left clearfix">
                             <!-- Best Sellers -->
                             <div class="sidebar_section">
-                                <div class="sidebar_title">最多人购买</div>
+                                <div class="sidebar_title">最多人浏览</div>
                                 <div class="sidebar_section_content bestsellers_content">
                                     <ul>
-                                        <!-- Best Seller Item -->
-                                        <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_1.jpg"
-                                                                         alt=""></div>
-                                            <div class="best_content">
-                                                <div class="best_title"><a href="">Blue dress with dots</a>
+                                        <c:forEach items="${requestScope.goodsTopFourList}" var="goods">
+                                            <!-- Best Seller Item -->
+                                            <li class="clearfix">
+                                                <div class="best_image">
+                                                    <img width="74px" height="74px" src="<%=path%>${goods.goodsImageUrl}" alt="">
                                                 </div>
-                                                <div class="best_price">$45</div>
-                                            </div>
-                                            <div class="best_buy">+</div>
-                                        </li>
-
-                                        <!-- Best Seller Item -->
-                                        <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_2.jpg"
-                                                                         alt=""></div>
-                                            <div class="best_content">
-                                                <div class="best_title"><a href="">White t-shirt</a></div>
-                                                <div class="best_price">$45</div>
-                                            </div>
-                                            <div class="best_buy">+</div>
-                                        </li>
-
-                                        <!-- Best Seller Item -->
-                                        <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_3.jpg"
-                                                                         alt=""></div>
-                                            <div class="best_content">
-                                                <div class="best_title"><a href="">Blue dress with dots</a>
+                                                <div class="best_content">
+                                                    <div class="best_title">
+                                                        <a href="<%=path%>/goods/info/${goods.goodsId}.do">${goods.goodsName}</a>
+                                                    </div>
+                                                    <div class="best_price">￥${goods.goodsPrice}</div>
                                                 </div>
-                                                <div class="best_price">$45</div>
-                                            </div>
-                                            <div class="best_buy">+</div>
-                                        </li>
-
-                                        <!-- Best Seller Item -->
-                                        <li class="clearfix">
-                                            <div class="best_image"><img src="<%=path%>/static/images/best_4.jpg"
-                                                                         alt=""></div>
-                                            <div class="best_content">
-                                                <div class="best_title"><a href="">White t-shirt</a></div>
-                                                <div class="best_price">$45</div>
-                                            </div>
-                                            <div class="best_buy">+</div>
-                                        </li>
-
+                                                <a href="<%=path%>/goods/info/${goods.goodsId}.do"><div class="best_buy">+</div></a>
+                                            </li>
+                                        </c:forEach>
                                     </ul>
                                 </div>
                             </div>
@@ -208,7 +177,7 @@
                                 <!-- Product -->
                                 <div class="product">
                                     <div class="product_image">
-                                        <img src="<%=path%>${goods.goodsImageUrl}" alt="">
+                                        <img width="290px" src="<%=path%>${goods.goodsImageUrl}" alt="">
                                     </div>
                                     <div class="rating rating_${goods.goodsScore}">
                                         <i class="fa fa-star"></i>
@@ -229,9 +198,9 @@
                                                 </div>
                                             </a>
                                             <a href="<%=path%>/goods/info/${goods.goodsId}.html">
-                                            <div class="product_fav product_option">
-                                                <img width="60%" src="<%=path%>/static/images/star.svg" alt="">
-                                            </div>
+                                                <div class="product_fav product_option">
+                                                    <img width="60%" src="<%=path%>/static/images/star.svg" alt="">
+                                                </div>
                                             </a>
                                         </div>
                                     </div>
@@ -251,19 +220,20 @@
                         <c:set var="count" value="${sessionScope.goodsCount}"/>
                         <c:set var="pages" value="${count%12==0?count/12:count/12+1}"/>
                         <c:forEach begin="1" end="${pages}" step="1" var="i">
-                            <li><a href="<%=path%>/customerLink/clothes/${i}/12.html" style="font-size: large;">${i}</a></li>
+                            <li><a href="<%=path%>/customerLink/clothes/${i}/12.html" style="font-size: large;">${i}</a>
+                            </li>
                         </c:forEach>
                         <%--<%--%>
-                            <%--int count = (int) request.getSession().getAttribute("goodsCount");--%>
-                            <%--int pages = (count % 12 == 0 ? count / 12 : count / 12 + 1);--%>
-                            <%--for (int i = 1; i <= pages; i++) {--%>
+                        <%--int count = (int) request.getSession().getAttribute("goodsCount");--%>
+                        <%--int pages = (count % 12 == 0 ? count / 12 : count / 12 + 1);--%>
+                        <%--for (int i = 1; i <= pages; i++) {--%>
                         <%--%>--%>
 
                         <%--<li><a href="<%=path%>/customerLink/clothes/<%=i %>/12.html" style="font-size: large;"><%=i %>--%>
                         <%--</a></li>--%>
 
                         <%--<%--%>
-                            <%--}--%>
+                        <%--}--%>
                         <%--%>--%>
                     </ul>
                 </div>

@@ -4,12 +4,20 @@ import com.ky.clothing.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Daye
  * 用户表Dao持久层
  */
 @Repository
 public interface UserMapper {
+
+    /**
+     * 查询所有用户的基本信息
+     * @return 返回userList
+     */
+    List<User> selectAllUserBaseInfo();
 
     /**
      * 根据用户id修改用户的头像url

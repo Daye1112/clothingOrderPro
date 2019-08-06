@@ -11,6 +11,11 @@ import java.util.Map;
  */
 public class CartUtil {
 
+    /**
+     * 计算购物车每种商品的价格
+     * @param cartList 购物车商品list
+     * @return 返回处理好的mapList
+     */
     public static List<Map<String, Object>> calculationTotalPrice(List<Map<String, Object>> cartList){
         if(null == cartList){
             return null;

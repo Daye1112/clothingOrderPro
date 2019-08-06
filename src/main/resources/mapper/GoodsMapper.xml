@@ -189,4 +189,61 @@
         from goods
         where goods_valid = 1
     </select>
+    <!--根据商品id对商品的浏览数自增1-->
+    <update id="updateVisitNumIncByGoodsId" parameterType="integer">
+        update goods
+        set visit_num = visit_num + 1
+        where goods_valid = 1
+          and goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+    <!--查询浏览量前4的商品信息-->
+    <select id="selectByVisitNumLimitFour" resultType="map">
+        SELECT goods_id        goodsId,
+               goods_image_url goodsImageUrl,
+               goods_name      goodsName,
+               goods_price     goodsPrice
+        FROM goods
+        WHERE goods_valid = 1
+        ORDER BY visit_num desc
+        LIMIT 4
+    </select>
+    <!--根据goodsId更新商品评分-->
+    <update id="updateGoodsScoreByGoodsId" parameterType="goods">
+        UPDATE goods
+        SET goods_score = #{goodsScore}
+        WHERE goods_valid = 1
+          AND goods_id = #{goodsId}
+    </update>
+    <!--商品库存-1-->
+    <update id="updateGoodsStockSelfByGoodsId" parameterType="integer">
+        update goods
+        set goods_stock = goods_stock - 1
+        where goods_valid = 1
+          and goods_stock > 0
+          and goods_id = #{goodsId}
+    </update>
+    <!--根据cartId更新商品的库存-->
+    <update id="updateGoodsStockByGoodsId" parameterType="integer">
+        UPDATE goods
+        SET goods_stock = goods_stock + (SELECT cart_goods_num
+                                         FROM `cart`
+                                         WHERE cart_valid = 1
+                                           and isBuy = 0
+                                           and cart_id = #{cartId})
+        WHERE goods_valid = 1
+          and goods_id = (SELECT goods_id
+                          FROM `cart`
+                          WHERE cart_valid = 1
+                            and isBuy = 0
+                            and cart_id = #{cartId})
+    </update>
+    <!--模糊查询商品信息-->
+    <select id="selectFuzzyByGoodsName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods
+        where goods_valid = 1
+        and goods_name like #{goodsName}
+        limit 1
+    </select>
 </mapper>

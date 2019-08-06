@@ -11,14 +11,14 @@
     </context:component-scan>
     <!-- 定义登录拦截器 -->
     <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
+        <!--<mvc:filter>-->
             <!--<mvc:mapping path="/pages/order/**"/>-->
             <!--<mvc:mapping path="/person/**"/>-->
             <!--<mvc:exclude-mapping path="/person/login"/>-->
             <!--<mvc:exclude-mapping path="/pages/person/login"/>-->
             <!--&lt;!&ndash;<mvc:exclude-mapping path="/login/**"/>&ndash;&gt;-->
-            <!--<bean class="com.ky.clothing.interceptor.LoginInterceptor"/>-->
-        <!--</mvc:interceptor>-->
+            <!--<bean class="com.ky.clothing.filternInterceptor"/>-->
+        <!--</mvc:filter>-->
     <!--</mvc:interceptors>-->
 
     <!--

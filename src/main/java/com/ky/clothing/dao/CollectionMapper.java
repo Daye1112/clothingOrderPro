@@ -33,7 +33,8 @@ public interface CollectionMapper {
 
     /**
      * 将商品加入到用户收藏单中
-     * @param Collectionss 收藏单对象
+     * @param clt 收藏单对象
+     * @return int
      */
     int insert(Collectionss clt);
     /**

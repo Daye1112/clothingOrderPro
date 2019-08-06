@@ -1,6 +1,7 @@
 package com.ky.clothing.service.impl;
 
 import com.ky.clothing.dao.CartMapper;
+import com.ky.clothing.dao.GoodsMapper;
 import com.ky.clothing.entity.Cart;
 import com.ky.clothing.service.CartService;
 import com.ky.clothing.util.CartUtil;
@@ -19,6 +20,13 @@ import java.util.Map;
 public class CartServiceImpl implements CartService {
 
     private CartMapper cartMapper;
+    private GoodsMapper goodsMapper;
+
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    @Override
+    public List<Map<String, Object>> findByUserIdForCheckOrder(Integer userId) {
+        return cartMapper.findByUserIdForCheckOrder(userId);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -29,12 +37,19 @@ public class CartServiceImpl implements CartService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteByUserId(Integer userId) {
+        //查询该用户购物车的所有商品
+        List<Map<String, Object>> cartList = cartMapper.selectGoodsIdAndCartGoodsNumByUserId(userId);
+        for (Map<String, Object> cart : cartList) {
+            goodsMapper.updateGoodsStockByGoodsId(Integer.parseInt(cart.get("cartId").toString()));
+        }
         cartMapper.deleteByUserId(userId);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteByCartId(Integer cartId) {
+        //根据cartId，将购物车的商品数加入到商品库存中
+        goodsMapper.updateGoodsStockByGoodsId(cartId);
         cartMapper.deleteByCartId(cartId);
     }
 
@@ -42,7 +57,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Map<String, Object>> findBaseInfoByUserId(Integer userId) {
         List<Map<String, Object>> cartList = cartMapper.findBaseInfoByUserId(userId);
-        System.out.println(cartList);
         return CartUtil.calculationTotalPrice(cartList);
     }
 
@@ -67,5 +81,10 @@ public class CartServiceImpl implements CartService {
     @Autowired
     public void setCartMapper(CartMapper cartMapper) {
         this.cartMapper = cartMapper;
+    }
+
+    @Autowired
+    public void setGoodsMapper(GoodsMapper goodsMapper) {
+        this.goodsMapper = goodsMapper;
     }
 }

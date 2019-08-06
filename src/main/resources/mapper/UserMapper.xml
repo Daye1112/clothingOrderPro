@@ -187,4 +187,10 @@
         WHERE user_valid = 1
           AND login_account = #{loginAccount}
     </select>
+    <!--查询所有用户的基本信息-->
+    <select id="selectAllUserBaseInfo" resultMap="BaseResultMap">
+        select user_id, login_account, id_card, phone, email, sex
+        from `user`
+        where user_valid = 1
+    </select>
 </mapper>

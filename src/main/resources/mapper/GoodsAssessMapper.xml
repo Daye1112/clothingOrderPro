@@ -146,4 +146,12 @@
             goods_assess_valid   = #{goodsAssessValid,jdbcType=BOOLEAN}
         where goods_assess_id = #{goodsAssessId,jdbcType=INTEGER}
     </update>
+    <!--根据goodsId查询商品的评价人数和总分数-->
+    <select id="selectSumScoreAndCntByGoodsId" resultType="map" parameterType="integer">
+        SELECT SUM(goods_assess_score) sumScore,
+               COUNT(goods_assess_id)  cnt
+        FROM `goods_assess`
+        WHERE goods_assess_valid = 1
+          AND goods_id = 1
+    </select>
 </mapper>

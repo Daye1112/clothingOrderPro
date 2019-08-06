@@ -55,7 +55,11 @@
                                autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <p>没有账号？ <a href="<%=path%>/customerLink/signUp.html">免费注册</a> | <a href="<%=path%>/customerLink/forgot/pwd.html">忘记密码?</a></p>
+                        <p>
+                            没有账号？ <a href="<%=path%>/customerLink/signUp.html">免费注册</a>
+                            | <a href="<%=path%>/customerLink/forgot/pwd.html">忘记密码?</a>
+                            | <a href="<%=path%>/customerLink/home.html">继续逛逛</a>
+                        </p>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="登录" class="btn btn-primary">

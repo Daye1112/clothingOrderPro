@@ -15,6 +15,13 @@ import java.util.Map;
 public interface GoodsAssessMapper {
 
     /**
+     * 根据goodsId查询商品的评价人数和总分数
+     * @param goodsId 商品id
+     * @return 返回map
+     */
+    Map<String, Object> selectSumScoreAndCntByGoodsId(@Param("goodsId") Integer goodsId);
+
+    /**
      * 查询评分最高的前4条评论
      * @return 返回list集合
      */

@@ -41,6 +41,8 @@
                 /user/signUp.do = anon
                 <!-- 用户登录页面无限制 -->
                 /userLink/login.html = anon
+                <!-- 后台登录页面无限制 -->
+                /lk/admin/login.html = anon
                 <!-- 登出 -->
                 /logout.do = logout
                 <!-- 商品操作需要登录 -->

@@ -5,6 +5,7 @@ import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.GoodsAssessService;
 import com.ky.clothing.service.GoodsService;
 import com.ky.clothing.util.IntegerUtil;
+import com.ky.clothing.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,32 @@ public class LinkCustomerHandler {
 
     private GoodsAssessService goodsAssessService;
 
+
+    /**
+     * 分页查询服装list
+     * @param pageNow 当前页
+     * @param pageSize 页大小
+     * @param request 请求域
+     * @return 跳转目标
+     */
     @RequestMapping(value = "/clothes/{pageNow}/{pageSize}", method = RequestMethod.GET)
     public String toClothes(@PathVariable("pageNow") Integer pageNow, @PathVariable("pageSize") Integer pageSize, HttpServletRequest request) {
-    	if(IntegerUtil.isValid(pageNow)&&IntegerUtil.isValid(pageSize))
-        {
+        if (pageNow != null && pageSize != null) {
             int count = goodsService.selectGoodsCount();
-            int pages = (count % pageSize.intValue() == 0 ? count / pageSize.intValue() : count / pageSize.intValue() + 1);
-            if(pageNow.intValue()>pages)
-            {
-                pageNow=new Integer(1);
+            int pages = (count % pageSize == 0 ? count / pageSize : count / pageSize + 1);
+            if (pageNow > pages || pageNow <= 0) {
+                pageNow = 1;
             }
-            List<Goods> goodlist1 = goodsService.selectGoodsLimit(pageNow, pageSize);
+            List<Goods> goodList = goodsService.selectGoodsLimit(pageNow, pageSize);
+            //查询浏览量前4的商品
+            List<Map<String, Object>> goodsList = goodsService.selectByVisitNumLimitFour();
             HttpSession session = request.getSession();
-            session.setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(),goodlist1);
-            session.setAttribute(SysParamEnum.SESSION_GOODS_COUNT.toString(),count);
+            session.setAttribute(SysParamEnum.SESSION_GOODS_LIST_NAME.toString(), goodList);
+            session.setAttribute(SysParamEnum.SESSION_GOODS_COUNT.toString(), count);
+            request.setAttribute(SysParamEnum.REQUEST_GOODS_LIST_VISIT_TOP_FOUR_NAME.toString(), goodsList);
+
         }
         return "/pages/clothes";
-
     }
 
     /**

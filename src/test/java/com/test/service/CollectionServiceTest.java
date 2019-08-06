@@ -1,21 +1,11 @@
 package com.test.service;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-import java.util.Map;
-
+import com.ky.clothing.entity.Collectionss;
+import com.ky.clothing.service.CollectionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.ky.clothing.entity.Collectionss;
-import com.ky.clothing.entity.User;
-import com.ky.clothing.enums.SysParamEnum;
-import com.ky.clothing.service.CartService;
-import com.ky.clothing.service.CollectionService;
-import com.ky.clothing.service.GoodsService;
 
 public class CollectionServiceTest {
 

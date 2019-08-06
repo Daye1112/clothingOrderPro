@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Product</title>
+    <title>商品详情</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Wish shop project">
@@ -82,7 +82,7 @@
                             <!-- In Stock -->
                             <div class="in_stock_container">
                                 <div class="in_stock in_stock_${sessionScope.goods.goodsStock > 0}"></div>
-                                <span>库存</span>
+                                <span>库存:&nbsp;&nbsp;${sessionScope.goods.goodsStock}件</span>
                             </div>
                             <div class="product_text">
                                 <p>${sessionScope.goods.goodsDesc}</p>
@@ -134,13 +134,16 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="button cart_button"><a id="cartBtn" href="#">添加购物车</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a id="cltBtn" href="#">添加收藏</a>
+                                    <c:if test="${sessionScope.goods.goodsStock > 0}">
+                                    <div class="button cart_button" style="float: left; margin-right: 10%;">
+                                        <a id="cartBtn" href="#">添加购物车</a>
+                                    </div>
+                                    </c:if>
+                                    <div class="button cart_button" style="float: left;">
+                                        <a id="cltBtn" href="#">添加收藏</a>
                                     </div>
                                 </div>
-                                
-                                </div>
-                                
+
                                 <input type="hidden" name="goodsId" value="${sessionScope.goods.goodsId}"/>
                             </form>
                         </div>
@@ -214,7 +217,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Newsletter -->
         <jsp:include page="module/news_letter.jsp"/>
         <!-- Footer -->
@@ -229,7 +232,7 @@
     <script src="<%=path%>/static/js/product_custom.js"></script>
     <script type="text/javascript" src="<%=path%>/static/plugins/layui/layui.js"></script>
     <script type="text/javascript">
-    	var value="";
+        var value = $('input[name="cartGoodsSize"]:checked').val();
         $(function () {
             var $fafa = $("#fafa");
             $("#fa1").click(function () {
@@ -269,16 +272,16 @@
             $("#cartForm").submit();
             return false;
         });
-        
+
         $("#cltBtn").click(function () {
-        	
-            window.location.href="<%=path%>/clt/add.do?goodsId="+"${goods.goodsId }"+"&cltGoodsSize="+value;
+
+            window.location.href = "<%=path%>/clt/add.do?goodsId=" + "${goods.goodsId }" + "&cltGoodsSize=" + value;
         });
-        
-        $('input[name="cartGoodsSize"]').click(function(){
-        	value= $('input[name="cartGoodsSize"]:checked').val();  
+
+        $('input[name="cartGoodsSize"]').click(function () {
+            value = $('input[name="cartGoodsSize"]:checked').val();
         })
-        
+
     </script>
     <%request.getSession().removeAttribute("dealMsg");%>
     <%request.getSession().removeAttribute("goods");%>

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Daye
@@ -12,10 +13,46 @@ import java.util.List;
  */
 @Repository
 public interface GoodsMapper {
+    /**
+     * 根据cartId更新商品的库存
+     * @param cartId 购物车id
+     */
+    void updateGoodsStockByGoodsId(@Param("cartId") Integer cartId);
+
+    /**
+     * 模糊查询商品信息
+     * @param goodsName 商品name
+     * @return 返回商品对象
+     */
+    Goods selectFuzzyByGoodsName(@Param("goodsName")String goodsName);
+
+    /**
+     * 商品库存-1
+     * @param goodsId 商品id
+     */
+    void updateGoodsStockSelfByGoodsId(@Param("goodsId") Integer goodsId);
+
+    /**
+     * 根据goodsId更新商品评分
+     * @param goods 待更新的对象
+     */
+    void updateGoodsScoreByGoodsId(Goods goods);
+
+    /**
+     * 查询浏览量前4的商品信息
+     * @return 返回mapList
+     */
+    List<Map<String, Object>> selectByVisitNumLimitFour();
+
+    /**
+     * 根据商品id对商品的浏览数自增1
+     * @param goodsId 商品id
+     */
+    void updateVisitNumIncByGoodsId(@Param("goodsId") Integer goodsId);
 
     /**
      * 查询记录总数
-     * @return
+     * @return 返回总记录数
      */
 	int selectGoodsCount();
 	/**

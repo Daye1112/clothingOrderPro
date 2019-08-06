@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>404</title>
+    <title>500</title>
     <link href="<%=path%>/static/css/404/404.css" rel="stylesheet" type="text/css">
     <script src="<%=path%>/static/js/404/jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
@@ -56,6 +56,7 @@
             <div class="in">
                 <div class="textThis">
                     <h2>页面出错啦</h2>
+                    <p style="color: red;">${requestScope.errorMsg}</p>
                     <p><span>3秒后，<a href="<%=path%>/customerLink/home.html">去首页溜达吧</a><a id="href" href="<%=path%>/customerLink/home.html"></a></span><span><b id="wait">3</b>秒</span></p>
                     <script type="text/javascript">                            (function() {
                         var wait = document.getElementById('wait'), href = document.getElementById('href').href;

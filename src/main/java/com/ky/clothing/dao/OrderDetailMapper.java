@@ -1,7 +1,11 @@
 package com.ky.clothing.dao;
 
 import com.ky.clothing.entity.OrderDetail;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Daye
@@ -9,6 +13,25 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OrderDetailMapper {
+
+    /**
+     * 根据订单id假删除所有对应的订单细节记录
+     * @param orderId 订单id
+     */
+    void deleteByOrderId(@Param("orderId") Integer orderId);
+
+    /**
+     * 根据orderId查询订单详情表
+     * @param orderId 订单id
+     * @return 返回listMap
+     */
+    List<Map<String, Object>> selectOrderDetailByOrderId(@Param("orderId") Integer orderId);
+
+    /**
+     * 插入订单细节对象list
+     * @param orderDetailList 订单细节对象list
+     */
+    void insertList(@Param("orderDetailList") List<OrderDetail> orderDetailList);
 
     /**
      * 根据id删除记录，并返回影响的行数

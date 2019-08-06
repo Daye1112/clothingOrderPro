@@ -2,11 +2,19 @@ package com.ky.clothing.service;
 
 import com.ky.clothing.entity.User;
 
+import java.util.List;
+
 /**
  * @author Daye
  * 用户Service层接口类
  */
 public interface UserService {
+
+    /**
+     * 查询所有用户的基本信息
+     * @return 返回userList
+     */
+    List<User> selectAllUserBaseInfo();
 
     /**
      * 根据用户id修改用户的头像url
