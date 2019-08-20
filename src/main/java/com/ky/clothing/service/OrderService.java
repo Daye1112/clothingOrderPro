@@ -13,6 +13,22 @@ import java.util.Map;
 public interface OrderService {
 
     /**
+     * 根据orderId更新记录（有null验证）
+     *
+     * @param order 待更新的数据
+     * @return 影响的行数
+     */
+    int updateByPrimaryKeySelective(Order order);
+
+    /**
+     * 分页查询订单信息
+     * @param startIndex 查询索引起始位置
+     * @param pageSize 页大小
+     * @return 返回OrderList
+     */
+    Map<String, Object> selectLimit(Integer startIndex, Integer pageSize);
+
+    /**
      * 根据订单号更新订单的支付信息
      * @param orderNo 订单号
      */

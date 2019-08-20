@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,36 @@ import java.util.Map;
 public class GoodsServiceImpl implements GoodsService {
 
     private GoodsMapper goodsMapper;
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int updateByPrimaryKeySelective(Goods goods) {
+        return goodsMapper.updateByPrimaryKeySelective(goods);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int insertSelective(Goods goods) {
+        return goodsMapper.insertSelective(goods);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateGoodsValidByGoodsId(Integer goodsId) {
+        goodsMapper.updateGoodsValidByGoodsId(goodsId);
+    }
+
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    @Override
+    public Map<String, Object> selectAllBaseInfoLimit(Integer startIndex, Integer pageSize) {
+        Map<String, Object> goodsInfoMap = new HashMap<>();
+        List<Goods> goodsList = goodsMapper.selectAllBaseInfoLimit(startIndex, pageSize);
+        Integer totalRecording = goodsMapper.selectTotalRecordingCountGoodsId();
+        Integer totalPage = (totalRecording + pageSize + 1) / pageSize;
+        goodsInfoMap.put("goodsList", goodsList);
+        goodsInfoMap.put("totalPage", totalPage);
+        return goodsInfoMap;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

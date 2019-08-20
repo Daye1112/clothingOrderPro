@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,24 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
     private CartMapper cartMapper;
     private OrderDetailMapper orderDetailMapper;
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int updateByPrimaryKeySelective(Order order) {
+        return orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    @Override
+    public Map<String, Object> selectLimit(Integer startIndex, Integer pageSize) {
+        Map<String, Object> resMap = new HashMap<>();
+        List<Order> orderList = orderMapper.selectLimit(startIndex, pageSize);
+        Integer totalRecording = orderMapper.selectCountOrderId();
+        Integer pageNum = (totalRecording + pageSize + 1) / pageSize;
+        resMap.put("orderList", orderList);
+        resMap.put("pageNum", pageNum);
+        return resMap;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

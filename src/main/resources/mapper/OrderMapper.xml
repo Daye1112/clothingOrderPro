@@ -66,6 +66,23 @@
         where order_valid = 1
           and user_id = #{userId}
     </select>
+    <!--分页查询基本信息-->
+    <select id="selectLimit" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `order`
+        where order_valid = 1
+        and isClosed = 0
+        order by order_id
+        limit #{startIndex}, #{pageSize}
+    </select>
+    <!--查询记录总数-->
+    <select id="selectCountOrderId" resultType="java.lang.Integer">
+        select count(order_id)
+        from `order`
+        where order_valid = 1
+          and isClosed = 0
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from `order`

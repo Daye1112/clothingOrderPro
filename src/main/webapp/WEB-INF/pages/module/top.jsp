@@ -10,9 +10,13 @@
             <ul>
                 <li><a href="<%=path%>/customerLink/home.html">主页</a></li>
                 <li><a href="<%=path%>/customerLink/clothes/1/12.html">服装</a></li>
-                <%--<li><a href="">accessories</a></li>--%>
                 <li><a href="<%=path%>/userLink/order/list.html">我的订单</a></li>
                 <li><a href="<%=path%>/customerLink/contact.html">联系我们</a></li>
+                <c:if test="${not empty sessionScope.user}">
+                    <c:if test="${sessionScope.user.manage}">
+                        <li><a href="<%=path%>/lk/admin/home.html">后台管理</a></li>
+                    </c:if>
+                </c:if>
             </ul>
         </nav>
         <div class="header_content ml-auto">

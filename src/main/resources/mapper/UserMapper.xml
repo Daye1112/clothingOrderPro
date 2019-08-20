@@ -29,7 +29,8 @@
         select
         <include refid="Base_Column_List"/>
         from `user`
-        where user_id = #{userId,jdbcType=INTEGER}
+        where user_valid = 1
+        and user_id = #{userId,jdbcType=INTEGER}
     </select>
     <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.ky.clothing.entity.User"
             useGeneratedKeys="true">
@@ -119,7 +120,7 @@
                 sex = #{sex,jdbcType=VARCHAR},
             </if>
             <if test="avatarUrl != null">
-                sex = #{avatarUrl,jdbcType=VARCHAR},
+                avatar_url = #{avatarUrl,jdbcType=VARCHAR},
             </if>
         </set>
         where user_valid = 1
@@ -136,7 +137,8 @@
             avatar_url    = #{avatarUrl,jdbcType=VARCHAR},
             manage        = #{manage,jdbcType=BOOLEAN},
             user_valid    = #{userValid,jdbcType=BOOLEAN}
-        where user_id = #{userId,jdbcType=INTEGER}
+        where user_valid = 1
+          and user_id = #{userId,jdbcType=INTEGER}
     </update>
     <select id="selectUserByLoginAccountAndPassword" resultMap="BaseResultMap" parameterType="user">
         select user_id,
@@ -166,6 +168,13 @@
         where user_valid = 1
           and user_id = #{userId}
     </update>
+    <!--根据userId修改用户为无效账号-->
+    <update id="updateUserValidFalseByUserId" parameterType="integer">
+        update `user`
+        set user_valid = 0
+        where user_valid = 1
+          and user_id = #{userId}
+    </update>
     <!-- 根据邮箱查询用户id和账号-->
     <select id="selectUserIdByEmail" resultMap="BaseResultMap" parameterType="string">
         select user_id, login_account
@@ -188,8 +197,15 @@
           AND login_account = #{loginAccount}
     </select>
     <!--查询所有用户的基本信息-->
-    <select id="selectAllUserBaseInfo" resultMap="BaseResultMap">
+    <select id="selectAllUserBaseInfoLimit" resultMap="BaseResultMap">
         select user_id, login_account, id_card, phone, email, sex
+        from `user`
+        where user_valid = 1
+        limit #{startIndex}, #{pageSize}
+    </select>
+    <!--查询所有用户的记录数-->
+    <select id="selectAllUserTotalRecording" resultType="java.lang.Integer">
+        select count(user_id)
         from `user`
         where user_valid = 1
     </select>

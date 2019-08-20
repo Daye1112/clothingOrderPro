@@ -79,6 +79,17 @@
 
     <!-- Custom Theme Scripts -->
     <script src="<%=path%>/static/adminContent/vendors/build/js/custom.min.js"></script>
+    <script type="text/javascript">
+        $("#menu_toggle").click(function () {
+            var css = $("body").attr("class");
+            if(css === "nav-md"){
+                $("body").attr("class", "nav-sm");
+                console.log($("body").attr("class") + "->" + "nav-md");
+            } else{
+                $("body").attr("class", "nav-md");
+            }
+        });
+    </script>
 </body>
 </html>
 

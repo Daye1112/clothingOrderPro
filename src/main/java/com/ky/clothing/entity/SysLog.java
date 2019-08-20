@@ -38,6 +38,9 @@ public class SysLog implements Serializable {
 	*/
     private String sysContent;
 
+    /**
+     * 系统时间
+     */
     private Date sysTime;
 
     /**

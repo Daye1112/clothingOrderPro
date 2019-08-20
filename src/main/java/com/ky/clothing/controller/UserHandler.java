@@ -2,11 +2,14 @@ package com.ky.clothing.controller;
 
 import com.ky.clothing.dao.CartMapper;
 import com.ky.clothing.dao.CollectionMapper;
+import com.ky.clothing.entity.JsonResult;
 import com.ky.clothing.entity.User;
+import com.ky.clothing.enums.ErrorEnum;
 import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.SysLogService;
 import com.ky.clothing.service.UserService;
 import com.ky.clothing.util.*;
+import javafx.geometry.Pos;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -17,13 +20,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +45,67 @@ public class UserHandler {
     private UserService userService;
     private CartMapper cartMapper;
     private CollectionMapper collectionMapper;
+
+    /**
+     * 根据userId删除用户
+     * @param userId 用户id
+     * @return json数据
+     */
+    @RequestMapping(value = "/del/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult deleteUser(@PathVariable("userId")Integer userId){
+        JsonResult jsonResult;
+        if(IntegerUtil.isNotValid(userId)){
+            jsonResult = JsonResultUtil.setErrorOf(ErrorEnum.EMPTY_ERROR);
+        } else{
+            userService.updateUserValidFalseByUserId(userId);
+            jsonResult = JsonResultUtil.setSuccessOf(null);
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 修改用户表，如果id不为空，则为修改，反之则为添加记录
+     * @param user 待处理的用户对象
+     * @return 返回json
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult updateUser(User user){
+        JsonResult jsonResult;
+        if(StringUtil.isEmpty(user.getLoginAccount()) || StringUtil.isEmpty(user.getPassword())){
+            jsonResult = JsonResultUtil.setErrorOf(ErrorEnum.EMPTY_ERROR);
+        }else {
+            //修改/添加
+            if (user.getUserId() != null) {
+                //修改
+                userService.updateByPrimaryKeySelective(user);
+            } else {
+                //添加
+                userService.insertSelective(user);
+            }
+            jsonResult = JsonResultUtil.setSuccessOf(null);
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 根据userId获取用户的信息
+     * @param userId 用户id
+     * @return 返回json格式
+     */
+    @RequestMapping(value = "/info/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult findUserInfoByUserId(@PathVariable("userId") Integer userId){
+        JsonResult jsonResult;
+        if(IntegerUtil.isNotValid(userId)){
+            jsonResult = JsonResultUtil.setErrorOf(ErrorEnum.EMPTY_ERROR);
+        } else{
+            User user = userService.selectByPrimaryKey(userId);
+            jsonResult = JsonResultUtil.setSuccessOf(user);
+        }
+        return jsonResult;
+    }
 
     /**
      * 用户修改头像
@@ -58,7 +125,7 @@ public class UserHandler {
             //2. 获取当前时间yyyyMMddHHmmssSS
             String nowDate = DateUtil.getNowTimeContinuous();
             //3. 确定uploads文件夹位置
-            String rootPath = request.getSession().getServletContext().getRealPath("static/uploads/");
+            String rootPath = request.getSession().getServletContext().getRealPath("static/uploads/avatar");
             //4. 获取当年当月的文件夹路径
             String dateFilePath = FileUtil.getDateFilePath(rootPath);
             //5. 判断文件夹是否存在，若不存在则创建
@@ -79,7 +146,7 @@ public class UserHandler {
                 } else {
                     //10. 获取文件的相对路径
                     Calendar date = Calendar.getInstance();
-                    String newImgPath = "/static/uploads/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/" + newFileName;
+                    String newImgPath = "/static/uploads/avatar/" + date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH) + 1) + "/" + newFileName;
                     //11. 将文件的相对路径存入user对象中
                     user.setAvatarUrl(newImgPath);
                     //12. 调用service层，进行保存

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String path = request.getContextPath();
@@ -18,6 +19,11 @@
             <%--<li class="menu_mm"><a href="">accessories</a></li>--%>
             <li class="menu_mm"><a href="<%=path%>/userLink/order/list.html">我的订单</a></li>
             <li class="menu_mm"><a href="<%=path%>/customerLink/contact.html">联系我们</a></li>
+            <c:if test="${not empty sessionScope.user}">
+                <c:if test="${sessionScope.user.manage}">
+                    <li><a href="<%=path%>/lk/admin/home.html">后台管理</a></li>
+                </c:if>
+            </c:if>
         </ul>
     </nav>
 </div>

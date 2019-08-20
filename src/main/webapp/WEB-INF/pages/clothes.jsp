@@ -177,7 +177,7 @@
                                 <!-- Product -->
                                 <div class="product">
                                     <div class="product_image">
-                                        <img width="290px" src="<%=path%>${goods.goodsImageUrl}" alt="">
+                                        <img width="290px" height="434.15px" src="<%=path%>${goods.goodsImageUrl}" alt="">
                                     </div>
                                     <div class="rating rating_${goods.goodsScore}">
                                         <i class="fa fa-star"></i>

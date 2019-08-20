@@ -127,7 +127,7 @@
         <init-param>
             <param-name>characterParams</param-name>
             <!-- 此处加入要过滤的字符或字符串，以逗号隔开 -->
-            <param-value>&lt;,&gt;,*,@,IMG,SRC,$,@,&apos;,|,>,+,CR,LF</param-value>
+            <param-value>&lt;,&gt;,*,IMG,SRC,$,&apos;,|,>,CR,LF</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -148,5 +148,13 @@
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>managerFilter</filter-name>
+        <filter-class>com.ky.clothing.filter.ManagerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>managerFilter</filter-name>
+        <url-pattern>/lk/admin/*</url-pattern>
     </filter-mapping>
 </web-app>

@@ -13,6 +13,27 @@ import java.util.Map;
  */
 @Repository
 public interface GoodsMapper {
+
+    /**
+     * 根据id将商品的valid置为0
+     * @param goodsId 商品id
+     */
+    void updateGoodsValidByGoodsId(@Param("goodsId") Integer goodsId);
+
+    /**
+     * 查询所有用户的记录数
+     * @return 返回userList
+     */
+    Integer selectTotalRecordingCountGoodsId();
+
+    /**
+     * 分页查询所有商品的基本信息
+     * @param startIndex 查询的索引位
+     * @param pageSize 查询记录数
+     * @return 返回userList
+     */
+    List<Goods> selectAllBaseInfoLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
     /**
      * 根据cartId更新商品的库存
      * @param cartId 购物车id

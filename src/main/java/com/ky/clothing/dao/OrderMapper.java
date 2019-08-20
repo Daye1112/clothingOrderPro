@@ -15,6 +15,20 @@ import java.util.Map;
 public interface OrderMapper {
 
     /**
+     * 查询记录总数
+     * @return 返回int
+     */
+    Integer selectCountOrderId();
+
+    /**
+     * 分页查询订单信息
+     * @param startIndex 查询索引起始位置
+     * @param pageSize 页大小
+     * @return 返回OrderList
+     */
+    List<Order> selectLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    /**
      * 根据订单号更新订单的支付信息
      * @param orderNo 订单号
      */

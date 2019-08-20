@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Daye
@@ -19,10 +21,32 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateUserValidFalseByUserId(Integer userId) {
+        userMapper.updateUserValidFalseByUserId(userId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int insertSelective(User record) {
+        return userMapper.insertSelective(record);
+    }
+
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     @Override
-    public List<User> selectAllUserBaseInfo() {
-        return userMapper.selectAllUserBaseInfo();
+    public Map<String, Object> selectAllUserBaseInfoLimit(Integer startIndex, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>(16);
+        //获取总记录
+        List<User> userList = userMapper.selectAllUserBaseInfoLimit(startIndex, pageSize);
+        //获取总记录数
+        int totalRecording = userMapper.selectAllUserTotalRecording();
+        //计算总页数
+        int totalPage = (totalRecording + pageSize - 1) / pageSize;
+        //存入map
+        map.put("userList", userList);
+        map.put("totalPage", totalPage);
+        return map;
     }
 
     @Transactional(rollbackFor = Exception.class)

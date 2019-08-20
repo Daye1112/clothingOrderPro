@@ -8,12 +8,12 @@ $(function () {
         layer.confirm("是否确认取消该订单？", {title: "确认删除"}, function (index) {
             layer.close(index);
             $.get(url, function (obj) {
-                if(obj.success){
-                    layer.msg("取消成功",{time:1000});
+                if (obj.success) {
+                    layer.msg("取消成功", {time: 1000});
                     setTimeout(function () {
                         window.location.reload();
                     }, 1000);
-                } else{
+                } else {
                     dealInfo(obj.message);
                 }
             });
@@ -70,13 +70,14 @@ $(function () {
             return false;
         })
     }
+
     $("a[name='orderInfo']").click(function () {
         var url = $(this).attr("href");
         $.get(url, function (obj) {
             if (obj.success) {
                 var data = obj.data;
                 layOrderInfoContent(data);
-            } else{
+            } else {
                 dealInfo(obj.message);
             }
         });
@@ -86,7 +87,7 @@ $(function () {
     function dealInfo(msg) {
         layui.use('layer', function () {
             var layer = layui.layer;
-            layer.msg(msg,{time:1000});
+            layer.msg(msg, {time: 1000});
         });
     }
 
@@ -167,11 +168,11 @@ $(function () {
                     (isInvoice ?
                         '<li class="d-flex flex-row align-items-center justify-content-start" style="overflow: auto;">' +
                         '<div class="cart_total_title" style="width: 100%;">发票抬头</div>' +
-                        '<div class="cart_total_price ml-auto" style="width: 100%;text-align: right;">无</div>' +
+                        '<div class="cart_total_price ml-auto" style="width: 100%;text-align: right;">' + data.invoiceClient + '</div>' +
                         '</li>' +
                         '<li class="d-flex flex-row align-items-center justify-content-start" style="overflow: auto;">' +
                         '<div class="cart_total_title" style="width: 100%;">发票税号</div>' +
-                        '<div class="cart_total_price ml-auto" style="width: 100%;text-align: right;">无</div>' +
+                        '<div class="cart_total_price ml-auto" style="width: 100%;text-align: right;">' + data.taxNum + '</div>' +
                         '</li>' : "") +
                     '<li class="d-flex flex-row align-items-center justify-content-start" style="overflow: auto;">' +
                     '<div class="cart_total_title" style="width: 100%;">订单总金额</div>' +

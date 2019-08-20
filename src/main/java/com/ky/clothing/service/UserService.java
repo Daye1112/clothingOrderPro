@@ -2,7 +2,7 @@ package com.ky.clothing.service;
 
 import com.ky.clothing.entity.User;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author Daye
@@ -11,10 +11,25 @@ import java.util.List;
 public interface UserService {
 
     /**
-     * 查询所有用户的基本信息
-     * @return 返回userList
+     * 根据userId修改用户为无效账号
+     * @param userId 用户id
      */
-    List<User> selectAllUserBaseInfo();
+    void updateUserValidFalseByUserId(Integer userId);
+
+    /**
+     * 插入记录（已验证空值）
+     * @param record 带插入的对象
+     * @return 刚插入的记录id
+     */
+    int insertSelective(User record);
+
+    /**
+     * 查询所有用户的基本信息
+     * @param startIndex 查询索引位
+     * @param pageSize 查询记录数
+     * @return 返回map
+     */
+    Map<String, Object> selectAllUserBaseInfoLimit(Integer startIndex, Integer pageSize);
 
     /**
      * 根据用户id修改用户的头像url

@@ -12,10 +12,7 @@ import com.ky.clothing.enums.ErrorEnum;
 import com.ky.clothing.enums.SysParamEnum;
 import com.ky.clothing.service.CartService;
 import com.ky.clothing.service.OrderService;
-import com.ky.clothing.util.AlipayConfig;
-import com.ky.clothing.util.IntegerUtil;
-import com.ky.clothing.util.JsonResultUtil;
-import com.ky.clothing.util.OrderUtil;
+import com.ky.clothing.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Daye
@@ -45,6 +39,59 @@ public class OrderHandler {
     private OrderService orderService;
     private CartService cartService;
 
+    /**
+     * 确认收货
+     * @param orderId 订单id
+     * @return json
+     */
+    @RequestMapping(value = "/confirm/{orderId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult confirmOrder(@PathVariable("orderId") Integer orderId){
+        JsonResult jsonResult;
+        if(IntegerUtil.isNotValid(orderId)){
+            jsonResult = JsonResultUtil.setErrorOf(ErrorEnum.EMPTY_ERROR);
+        } else{
+            Order order = new Order();
+            order.setOrderId(orderId);
+            order.setIsclosed((short)1);
+            order.setOrderStatus((short)4);
+            order.setReceiveTime(new Date());
+            orderService.updateByPrimaryKeySelective(order);
+            jsonResult = JsonResultUtil.setSuccessOf(null);
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 更新订单状态
+     * @param order 待更新的订单对象
+     * @return 然后json对象
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult updateOrder(Order order){
+        JsonResult jsonResult;
+        if(IntegerUtil.isNotValid(order.getOrderId()) || StringUtil.isEmpty(order.getOrderAddress()) || StringUtil.isEmpty(order.getUserRealName())){
+            jsonResult = JsonResultUtil.setErrorOf(ErrorEnum.EMPTY_ERROR);
+        } else{
+            Order checkOrder = orderService.selectByPrimaryKey(order.getOrderId());
+            if(order.getOrderStatus() == 4){
+                order.setIsclosed((short)1);
+                order.setReceiveTime(new Date());
+            } else if(order.getOrderStatus() == 3 && checkOrder.getOrderStatus() != 3){
+                order.setDeliveryTime(new Date());
+            }
+            orderService.updateByPrimaryKeySelective(order);
+            jsonResult = JsonResultUtil.setSuccessOf(null);
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 付款完毕
+     * @param request 请求域
+     * @return 返回到订单list页面
+     */
     @RequestMapping(value = "/pay/over", method = RequestMethod.GET)
     public ModelAndView payOverDeal(HttpServletRequest request) throws UnsupportedEncodingException, AlipayApiException {
         ModelAndView modelAndView = new ModelAndView();
@@ -78,6 +125,12 @@ public class OrderHandler {
         return modelAndView;
     }
 
+    /**
+     * 跳转到付款页面
+     * @param orderId 订单id
+     * @param request 请求域
+     * @return 返回json格式数据
+     */
     @RequestMapping(value = "/goAlipay/{orderId}", method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
     @ResponseBody
     public String goAlipay(@PathVariable("orderId") Integer orderId, HttpServletRequest request) throws AlipayApiException {

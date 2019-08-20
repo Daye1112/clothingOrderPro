@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String path = request.getContextPath();
@@ -14,6 +15,11 @@
                         <%--<li><a href="">accessories</a></li>--%>
                         <li><a href="<%=path%>/userLink/order/list.html">我的订单</a></li>
                         <li><a href="<%=path%>/customerLink/contact.html">联系我们</a></li>
+                        <c:if test="${not empty sessionScope.user}">
+                            <c:if test="${sessionScope.user.manage}">
+                                <li><a href="<%=path%>/lk/admin/home.html">后台管理</a></li>
+                            </c:if>
+                        </c:if>
                     </ul>
                 </nav>
                 <div class="footer_social">
@@ -26,7 +32,8 @@
                     </ul>
                 </div>
                 <div class="copyright">
-                    <p>Copyright &copy; 2019.基于“互联网+”的广场舞服饰设计与研究 All rights reserved.More 浙江理工大学科技与艺术学院—科技创新计划</p>
+                    <p>Copyright &copy; 2019.基于“互联网+”的广场舞服饰设计与研究</p>
+                    <p>All rights reserved.More 浙江理工大学科技与艺术学院—科技创新计划</p>
                 </div>
             </div>
         </div>

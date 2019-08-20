@@ -90,7 +90,7 @@
         <logger name="com.ky.clothing" level="debug" />
         <root level="all">
             <appender-ref ref="ProDebugLog"/>
-            <appender-ref ref="Console"/>
+            <!--<appender-ref ref="Console"/>-->
             <appender-ref ref="InfoLog"/>
             <appender-ref ref="WarnLog"/>
             <appender-ref ref="ErrorLog"/>

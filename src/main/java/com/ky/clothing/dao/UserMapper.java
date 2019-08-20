@@ -14,10 +14,24 @@ import java.util.List;
 public interface UserMapper {
 
     /**
-     * 查询所有用户的基本信息
+     * 根据userId修改用户为无效账号
+     * @param userId 用户id
+     */
+    void updateUserValidFalseByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 查询所有用户的记录数
      * @return 返回userList
      */
-    List<User> selectAllUserBaseInfo();
+    Integer selectAllUserTotalRecording();
+
+    /**
+     * 分页查询所有用户的基本信息
+     * @param startIndex 查询的索引位
+     * @param pageSize 查询记录数
+     * @return 返回userList
+     */
+    List<User> selectAllUserBaseInfoLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 
     /**
      * 根据用户id修改用户的头像url

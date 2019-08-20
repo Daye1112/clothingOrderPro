@@ -54,7 +54,9 @@
                         <p style="color: red;">
                             测试阶段，请使用测试的支付宝账号，不会影响自己的信息<br/>
                             支付账号:<span id="account_id" class="account">sgifly0398@sandbox.com</span>&nbsp;&nbsp;&nbsp;
-                            <a data-clipboard-target="#account_id" onclick="copyAccount();return false;" href="#" id="copyAccount" style="width: auto;height: auto;" class="button_update cart_button_2 ml-md-auto">复制</a><br/>
+                            <a data-clipboard-target="#account_id" onclick="copyAccount();return false;" href="#"
+                               id="copyAccount" style="width: auto;height: auto;"
+                               class="button_update cart_button_2 ml-md-auto">复制</a><br/>
                             支付密码:111111
                         </p>
                     </div>
@@ -100,7 +102,12 @@
                                                     <c:if test="${order.orderStatus == 0}">
                                                         <a href="<%=path%>/order/delete/${order.orderId}.do"
                                                            name="orderDelete" class="cart_product_edit">取消</a>/
-                                                        <a href="<%=path%>/order/goAlipay/${order.orderId}.do" name="goAlipay" class="cart_product_edit" target="_blank">前往支付</a>
+                                                        <a href="<%=path%>/order/goAlipay/${order.orderId}.do"
+                                                           name="goAlipay" class="cart_product_edit" target="_blank">前往支付</a>
+                                                    </c:if>
+                                                    <c:if test="${order.orderStatus == 3}">
+                                                        <a href="<%=path%>/order/confirm/${order.orderId}.do"
+                                                           name="orderConfirm" class="cart_product_edit">确认收货</a>/
                                                     </c:if>
                                                 </div>
                                             </div>
@@ -141,6 +148,27 @@
     <script type="text/javascript" src="<%=path%>/static/plugins/clipboard/clipboard.min.js"></script>
     <script type="text/javascript">
         $(function () {
+            $("a[name='orderConfirm']").click(function () {
+                var url = $(this).prop("href");
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.confirm("是否确认收货？", {title: "确认收货"}, function (index) {
+                        layer.close(index);
+                        $.get(url, function (obj) {
+                            if (obj.success) {
+                                layer.msg("确认收货成功");
+                            } else {
+                                layer.msg("确认收货失败");
+                            }
+                            setTimeout(function () {
+                                //刷新当前页面
+                                window.location.reload();
+                            }, 1000);
+                        });
+                    });
+                });
+                return false;
+            });
             layui.use('layer', function () {
                 var layer = layui.layer;
                 <c:if test="${not empty sessionScope.dealMsg}">
@@ -153,13 +181,13 @@
         /**
          * 复制支付宝账号
          */
-        function copyAccount(){
+        function copyAccount() {
             var $copyAccount = $("#copyAccount");
             var copyBtn = new ClipboardJS('.col .button_update');
-            copyBtn.on("success",function(e){
+            copyBtn.on("success", function (e) {
                 $copyAccount.text("已复制");
             });
-            copyBtn.on("error",function(e){
+            copyBtn.on("error", function (e) {
                 $copyAccount.text("复制失败");
             });
             return false;

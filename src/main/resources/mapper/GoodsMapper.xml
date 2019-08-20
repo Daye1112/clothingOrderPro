@@ -179,7 +179,7 @@
         select goods_id, goods_no, goods_name, goods_image_url, goods_price, goods_score
         from goods
         where goods_valid = 1
-        order by goods_score
+        order by goods_score desc
         limit #{startIndex},#{pageSize}
     </select>
 
@@ -237,6 +237,13 @@
                             and isBuy = 0
                             and cart_id = #{cartId})
     </update>
+    <!--根据id将商品的valid置为0-->
+    <update id="updateGoodsValidByGoodsId" parameterType="integer">
+        update goods
+        set goods_valid = 0
+        where goods_valid = 1
+          and goods_id = #{goodsId}
+    </update>
     <!--模糊查询商品信息-->
     <select id="selectFuzzyByGoodsName" resultMap="BaseResultMap">
         select
@@ -245,5 +252,20 @@
         where goods_valid = 1
         and goods_name like #{goodsName}
         limit 1
+    </select>
+    <!--分页查询所有用户的基本信息-->
+    <select id="selectAllBaseInfoLimit" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods
+        where goods_valid = 1
+        order by visit_num desc
+        limit #{startIndex}, #{pageSize}
+    </select>
+    <!--查询所有用户的记录数-->
+    <select id="selectTotalRecordingCountGoodsId" resultType="java.lang.Integer">
+        select count(goods_id)
+        from goods
+        where goods_valid = 1
     </select>
 </mapper>
